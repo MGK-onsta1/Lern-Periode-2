@@ -1,6 +1,4 @@
-# Lern-Periode-2
-
-# 16.10.2026 | Projekt: Number Guesser
+# Lern-Periode-2 | 16.10.2026 | Projekt: Number Guesser
 
 ## Heute
 
@@ -17,7 +15,7 @@ Gelernt habe ich:
 
 Der Computer denkt sich eine Zahl aus. Du rätst, und der Computer sagt dir, ob die Zahl grösser oder kleiner ist. Das geht so lange, bis du die richtige Zahl hast.
 
-
+<img width="571" height="599" alt="image" src="https://github.com/user-attachments/assets/2d615303-49ba-4135-8483-3bcbb4d00773" />
 
 ## Nächstes Mal
 
@@ -27,4 +25,3 @@ Der Computer denkt sich eine Zahl aus. Du rätst, und der Computer sagt dir, ob 
 - [ ] Code aufräumen und einen Screenshot machen
 
 Danach will ich einen Budget Manager programmieren.
-````
