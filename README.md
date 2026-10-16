@@ -1,4 +1,6 @@
-# Lern-Periode-2 | 16.10.2026 | Projekt: Number Guesser
+# Lern-Periode-2
+
+#16.10.2026 | Projekt: Number Guesser
 
 ## Heute
 
