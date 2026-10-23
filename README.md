@@ -43,4 +43,33 @@ Dann habe ich einen Versuchszähler eingebaut, der bei jedem gültigen Tipp hoch
 
 
 ## Nächstes Mal
-- [ ] Mit dem Budget Manager starten
+- [x] Mit dem Budget Manager starten
+
+
+# 23.10.2026 | Projekt: Budget Manager
+
+## Heute
+Heute habe ich mit meinem neuen Projekt, dem Budget Manager, angefangen. Ich mache es als Konsolen-App in C#.
+
+Zuerst habe ich mir überlegt, welche Daten mein Programm braucht, und dafür Variablen erstellt: Einnahmen, Ausgaben, Name vom Sparziel, Betrag vom Sparziel, wie viel ich schon gespart habe und den Dateinamen zum Speichern.
+
+Ich habe gelernt, dass man für Geld `decimal` nimmt und nicht `double`, weil `decimal` genauer rechnet. Ausserdem habe ich gelernt, was `string dateiPfad = "budget.txt";` bedeutet: Die Variable speichert den Namen der Datei, und die Datei liegt im gleichen Ordner wie das Programm (relativer Pfad).
+
+Dann habe ich den Code geschrieben, der beim Start die Daten aus der Datei lädt. Mit `File.Exists` prüfe ich, ob die Datei schon da ist. Mit `File.ReadAllLines` lese ich alle Zeilen in ein Array, und mit `decimal.Parse` mache ich aus dem Text wieder Zahlen. Dabei habe ich gemerkt, dass die Reihenfolge der Zeilen sehr wichtig ist.
+
+Ich hatte einen Fehler: Ich habe die Variable `zeile` genannt, aber danach `zeilen` geschrieben. C# merkt schon den kleinsten Unterschied im Namen.
+
+**Status:** Variablen und Laden aus der Datei sind geschrieben. Menü fehlt noch.
+
+## Programmbeschreibung
+Der Budget Manager ist ein Programm, mit dem ich meine Einnahmen und Ausgaben eintragen kann. Es zeigt mir, wie viel Geld ich noch übrig habe. Ich kann auch ein Sparziel festlegen (z. B. ein Auto) und sehen, wie viel ich schon habe und wie viel noch fehlt. Das Programm speichert alles in einer Datei, damit die Daten beim nächsten Mal noch da sind.
+
+<img width="924" height="495" alt="image" src="https://github.com/user-attachments/assets/13df8abf-b6be-4334-858b-ba0ab4d30f0c" />
+
+
+## Nächstes Mal
+- [ ] Fehler `zeile` / `zeilen` korrigieren
+- [ ] Menü mit `while`-Schleife bauen (1 bis 5)
+- [ ] Falsche Eingaben abfangen
+- [ ] Einnahme und Ausgabe eintragen
+- [ ] Übersicht anzeigen
