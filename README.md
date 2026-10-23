@@ -53,7 +53,7 @@ Heute habe ich mit meinem neuen Projekt, dem Budget Manager, angefangen. Ich mac
 
 Zuerst habe ich mir überlegt, welche Daten mein Programm braucht, und dafür Variablen erstellt: Einnahmen, Ausgaben, Name vom Sparziel, Betrag vom Sparziel, wie viel ich schon gespart habe und den Dateinamen zum Speichern.
 
-Ich habe gelernt, dass man für Geld `decimal` nimmt und nicht `double`, weil `decimal` genauer rechnet. Ausserdem habe ich gelernt, was `string dateiPfad = "budget.txt";` bedeutet: Die Variable speichert den Namen der Datei, und die Datei liegt im gleichen Ordner wie das Programm (relativer Pfad).
+Ich habe gelernt, dass man für Geld `decimal` nimmt und nicht `double`, weil `decimal` genauer rechnet. Ausserdem habe ich gelernt, was `string dateiPfad = "budget.txt";` bedeutet: Die Variable speichert den Namen der Datei, und die Datei liegt im gleichen Ordner wie das Programm.
 
 Dann habe ich den Code geschrieben, der beim Start die Daten aus der Datei lädt. Mit `File.Exists` prüfe ich, ob die Datei schon da ist. Mit `File.ReadAllLines` lese ich alle Zeilen in ein Array, und mit `decimal.Parse` mache ich aus dem Text wieder Zahlen. Dabei habe ich gemerkt, dass die Reihenfolge der Zeilen sehr wichtig ist.
 
