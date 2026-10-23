@@ -59,7 +59,7 @@ Dann habe ich den Code geschrieben, der beim Start die Daten aus der Datei lädt
 
 Ich hatte einen Fehler: Ich habe die Variable `zeile` genannt, aber danach `zeilen` geschrieben. C# merkt schon den kleinsten Unterschied im Namen.
 
-**Status:** Variablen und Laden aus der Datei sind geschrieben. Menü fehlt noch.
+**Status:** Variablen und Laden aus der Datei sind geschrieben. Menü fehlt noch. Es hat sehr lang gedauert, weil ich dieses YouTube Tutorial schauen musste: https://www.youtube.com/watch?v=GsBqMESx1SA
 
 ## Programmbeschreibung
 Der Budget Manager ist ein Programm, mit dem ich meine Einnahmen und Ausgaben eintragen kann. Es zeigt mir, wie viel Geld ich noch übrig habe. Ich kann auch ein Sparziel festlegen (z. B. ein Auto) und sehen, wie viel ich schon habe und wie viel noch fehlt. Das Programm speichert alles in einer Datei, damit die Daten beim nächsten Mal noch da sind.
