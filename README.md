@@ -21,9 +21,26 @@ Der Computer denkt sich eine Zahl aus. Du rätst, und der Computer sagt dir, ob 
 
 ## Nächstes Mal
 
-- [ ] Verstehen, was `int tipp = 0;` bedeutet, und das Programm testen
-- [ ] Die Versuche zählen und am Ende anzeigen
-- [ ] Falsche Eingaben abfangen (z. B. Buchstaben)
-- [ ] Code aufräumen und einen Screenshot machen
+- [x] Verstehen, was `int tipp = 0;` bedeutet, und das Programm testen
+- [x] Die Versuche zählen und am Ende anzeigen
+- [x] Falsche Eingaben abfangen (z. B. Buchstaben)
+- [x] Code aufräumen und einen Screenshot machen
 
 Danach will ich einen Budget Manager programmieren.
+
+# 23.10.2026 | Projekt: Number Guesser
+
+## Heute
+Ich habe die 4 Punkte vom letzten Mal gelöst. `int tipp = 0;` hab ich verstanden: das ist nur ein Startwert, der sicher nicht die gesuchte Zahl ist, damit die Schleife überhaupt beginnt.
+
+Dann habe ich einen Versuchszähler eingebaut, der bei jedem gültigen Tipp hochzählt. Ausserdem fange ich jetzt falsche Eingaben ab (z. B. Buchstaben) mit `int.TryParse` statt `Convert.ToInt32` – das Programm stürzt also nicht mehr ab, sondern fragt einfach nochmal. Zum Schluss habe ich den Code aufgeräumt und eine unnötige `using`-Zeile entfernt.
+
+**Status:** fertig – das Programm zählt die Versuche und stürzt bei falscher Eingabe nicht mehr ab.
+
+**Programmbeschreibung:** Der Computer denkt sich eine Zahl aus. Du rätst, und der Computer sagt dir, ob die Zahl grösser oder kleiner ist, bis du sie richtig hast. Am Ende siehst du, wie viele Versuche du gebraucht hast.
+
+<img width="495" height="459" alt="image" src="https://github.com/user-attachments/assets/20b59f7f-eeac-47b5-8abf-23cc4529f96d" />
+
+
+## Nächstes Mal
+- [ ] Mit dem Budget Manager starten
