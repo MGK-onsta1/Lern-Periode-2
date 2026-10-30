@@ -99,7 +99,8 @@ Ich habe mich aber entschieden, das Projekt jetzt zu pausieren, weil ich zuerst 
 Ich habe mit dem Morsecode-Projekt angefangen und die Codetabelle erstellt, die Buchstaben, Zahlen und Sonderzeichen auf Morsecode abbildet.
 
 **Status:** gestartet – Grundgerüst (Form, Codetabelle, Audio-Datei) steht. Ich habe diese Video angeschaut: https://www.youtube.com/watch?v=ObcGBT4ZWEU&t=127s, https://www.youtube.com/watch?v=dYkpTvgCclo&pp=ygUQTW9yc2UgQ29kZSBpbiBDI9IHCQkrDAGHKiGM7w%3D%3D
-<img width="1298" height="681" alt="image" src="https://github.com/user-attachments/assets/dff7803e-4774-4f98-8677-f78798109abf" />
+<img width="1403" height="572" alt="image" src="https://github.com/user-attachments/assets/fb953ac5-acbb-4fd2-8da7-fe118a4f5166" />
+
 
 ## Ausblick
 Als Nächstes geht's an die eigentliche Übersetzungslogik und die Benutzeroberfläche, danach an Lern-Modus und Chat-Funktionen.
