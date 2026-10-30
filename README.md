@@ -89,6 +89,6 @@ Ich habe mich aber entschieden, das Projekt jetzt zu pausieren, weil ich zuerst 
 
 
 ## Nächstes Mal
-- [ ] Lösung einbauen und testen
-- [ ] Code aufräumen
-- [ ] Mit dem Morsecode-Projekt starten
+- [x] Lösung einbauen und testen
+- [x] Code aufräumen
+- [x] Mit dem Morsecode-Projekt starten
