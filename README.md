@@ -85,7 +85,7 @@ Ich habe mich aber entschieden, das Projekt jetzt zu pausieren, weil ich zuerst 
 
 **Programmbeschreibung:** Der Budget Manager ist ein Programm, mit dem ich meine Einnahmen und Ausgaben eintragen kann. Es zeigt mir, wie viel Geld ich noch übrig habe. Ich kann auch ein Sparziel festlegen und sehen, wie viel ich schon habe und wie viel noch fehlt.
 
-**Screenshot:**<img width="842" height="863" alt="image" src="https://github.com/user-attachments/assets/58e29a97-327a-413e-bc3e-997ac3cc3439" />
+<img width="842" height="863" alt="image" src="https://github.com/user-attachments/assets/58e29a97-327a-413e-bc3e-997ac3cc3439" />
 
 
 ## Nächstes Mal
