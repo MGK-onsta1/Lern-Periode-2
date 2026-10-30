@@ -92,3 +92,21 @@ Ich habe mich aber entschieden, das Projekt jetzt zu pausieren, weil ich zuerst 
 - [x] Lösung einbauen und testen
 - [x] Code aufräumen
 - [x] Mit dem Morsecode-Projekt starten
+
+# 30.10.2026 | Projekt: MorseCode
+
+## Heute
+Ich habe mit dem Morsecode-Projekt angefangen und die Codetabelle erstellt, die Buchstaben, Zahlen und Sonderzeichen auf Morsecode abbildet.
+
+**Status:** gestartet – Grundgerüst (Form, Codetabelle, Audio-Datei) steht. Ich habe diese Video angeschaut: https://www.youtube.com/watch?v=ObcGBT4ZWEU&t=127s, https://www.youtube.com/watch?v=dYkpTvgCclo&pp=ygUQTW9yc2UgQ29kZSBpbiBDI9IHCQkrDAGHKiGM7w%3D%3D
+<img width="1298" height="681" alt="image" src="https://github.com/user-attachments/assets/dff7803e-4774-4f98-8677-f78798109abf" />
+
+## Ausblick
+Als Nächstes geht's an die eigentliche Übersetzungslogik und die Benutzeroberfläche, danach an Lern-Modus und Chat-Funktionen.
+
+## Nächstes Mal (5 Arbeitspakete)
+- [ ] Übersetzer Text ↔ Morse mit der Codetabelle fertigstellen
+- [ ] Form1-Oberfläche bauen (Textfeld, Übersetzen-Button, Anzeige)
+- [ ] MorseAudio fertigstellen (Signalton für Punkt/Strich abspielen)
+- [ ] Eingabe über die Leertaste einbauen (kurz = Punkt, lang = Strich)
+- [ ] Lern-Modus einbauen
