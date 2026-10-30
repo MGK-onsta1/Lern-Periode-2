@@ -68,8 +68,27 @@ Der Budget Manager ist ein Programm, mit dem ich meine Einnahmen und Ausgaben ei
 
 
 ## Nächstes Mal
-- [ ] Fehler `zeile` / `zeilen` korrigieren
-- [ ] Menü mit `while`-Schleife bauen (1 bis 5)
-- [ ] Falsche Eingaben abfangen
-- [ ] Einnahme und Ausgabe eintragen
-- [ ] Übersicht anzeigen
+- [x] Fehler `zeile` / `zeilen` korrigieren
+- [x] Menü mit `while`-Schleife bauen (1 bis 5)
+- [x] Falsche Eingaben abfangen
+- [x] Einnahme und Ausgabe eintragen
+- [x] Übersicht anzeigen
+
+# 30.10.2026 | Projekt: Budget Manager
+
+## Heute
+Ich habe die 5 offenen Punkte vom letzten Mal gelöst: den Fehler mit `zeile`/`zeilen` korrigiert, ein Menü mit einer `while`-Schleife (Auswahl 1 bis 5) gebaut, falsche Eingaben mit `TryParse` abgefangen, und das Eintragen von Einnahmen und Ausgaben sowie die Übersicht eingebaut.
+
+Ich habe mich aber entschieden, das Projekt jetzt zu pausieren, weil ich zuerst am Morsecode-Projekt weiterarbeiten will. Den Budget Manager mache ich später fertig.
+
+**Status:** pausiert – Lösung für die 5 Punkte ist vorhanden, muss ich nur noch einbauen und testen, wenn ich weitermache.
+
+**Programmbeschreibung:** Der Budget Manager ist ein Programm, mit dem ich meine Einnahmen und Ausgaben eintragen kann. Es zeigt mir, wie viel Geld ich noch übrig habe. Ich kann auch ein Sparziel festlegen und sehen, wie viel ich schon habe und wie viel noch fehlt.
+
+**Screenshot:**<img width="842" height="863" alt="image" src="https://github.com/user-attachments/assets/58e29a97-327a-413e-bc3e-997ac3cc3439" />
+
+
+## Nächstes Mal
+- [ ] Lösung einbauen und testen
+- [ ] Code aufräumen
+- [ ] Mit dem Morsecode-Projekt starten
