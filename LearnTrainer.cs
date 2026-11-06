@@ -94,5 +94,50 @@ namespace Morse
             Correct = Wrong = Streak = BestStreak = 0;
             _mistakes.Clear();
         }
+
+        // ---------------------------------------------------------------- Speichern / Laden
+
+        /// <summary>Speicherort: %AppData%\Morse\lernstand.json</summary>
+        public static readonly string SavePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Morse", "lernstand.json");
+
+        /// <summary>Daten, die in die JSON-Datei geschrieben werden.</summary>
+        private sealed record SaveData(int Correct, int Wrong, int Streak, int BestStreak, Dictionary<string, int> Mistakes);
+
+        /// <summary>Speichert den Punktestand. Fehler beim Speichern werden ignoriert (das Spiel läuft weiter).</summary>
+        public void Save(string? path = null)
+        {
+            path ??= SavePath;
+            try
+            {
+                var data = new SaveData(Correct, Wrong, Streak, BestStreak,
+                    _mistakes.ToDictionary(kv => kv.Key.ToString(), kv => kv.Value));
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                File.WriteAllText(path, System.Text.Json.JsonSerializer.Serialize(data,
+                    new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+            }
+            catch (Exception) { /* z. B. keine Schreibrechte – dann eben nicht speichern */ }
+        }
+
+        /// <summary>Lädt den Punktestand, falls eine Datei existiert. Kaputte Dateien werden ignoriert.</summary>
+        public void Load(string? path = null)
+        {
+            path ??= SavePath;
+            try
+            {
+                if (!File.Exists(path)) return;
+                var data = System.Text.Json.JsonSerializer.Deserialize<SaveData>(File.ReadAllText(path));
+                if (data == null) return;
+
+                Correct = data.Correct;
+                Wrong = data.Wrong;
+                Streak = data.Streak;
+                BestStreak = data.BestStreak;
+                _mistakes.Clear();
+                foreach (var kv in data.Mistakes ?? new())
+                    if (kv.Key.Length == 1) _mistakes[kv.Key[0]] = kv.Value;
+            }
+            catch (Exception) { /* kaputte Datei → mit 0 anfangen */ }
+        }
     }
 }

@@ -40,6 +40,7 @@
             cmbLevel.SelectedIndex = 0;
 
             ApplySettings();
+            _trainer.Load();   // gespeicherten Punktestand laden
             UpdateScore();
             timerKeyer.Start();
         }
@@ -189,6 +190,12 @@
             e.Handled = true;
             e.SuppressKeyPress = true;
             ReleaseKey();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            _trainer.Save();   // beim Schliessen sicherheitshalber nochmal speichern
+            base.OnFormClosing(e);
         }
 
         private void Form1_Deactivate(object? sender, EventArgs e)
@@ -404,6 +411,7 @@
                 lblChallenge.Text = $"{target}   {targetCode}";
 
             UpdateScore();
+            _trainer.Save();   // nach jeder Antwort speichern
             timerLearnNext.Interval = ok ? 1200 : 2500;
             timerLearnNext.Start();
         }
@@ -432,6 +440,7 @@
         private void btnLearnReset_Click(object? sender, EventArgs e)
         {
             _trainer.ResetScore();
+            _trainer.Save();
             UpdateScore();
             RestoreLearnFocus();
         }
@@ -446,7 +455,9 @@
         {
             lblScore.Text = _trainer.ScoreText;
             string weak = _trainer.WeakChars;
-            lblWeak.Text = weak.Length == 0 ? "" : $"Diese Zeichen solltest du noch üben (kommen öfter dran): {weak}";
+            lblWeak.Text = weak.Length == 0
+                ? "Der Punktestand wird automatisch gespeichert."
+                : $"Diese Zeichen solltest du noch üben (kommen öfter dran): {weak}";
         }
     }
 }
