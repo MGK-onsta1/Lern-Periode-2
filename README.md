@@ -128,8 +128,6 @@ Gelernt habe ich:
 
 **Status:** fertig – den Ton und die Leertaste muss ich noch testen.
 
-**Wichtig:** Weil es viele Dateien sind, habe ich sie auf Branches hochgeladen.
-
 <img width="721" height="483" alt="image" src="https://github.com/user-attachments/assets/70dfb54e-bc95-4315-9f4d-7cfded9393fd" />
 
 
