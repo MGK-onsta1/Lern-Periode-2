@@ -140,5 +140,30 @@ Gelernt habe ich:
 
 Danach will ich im Lern-Modus ganze Wörter üben.
 
+# 06.11.2026 (Nachmittag) | Projekt: Morse-Übersetzer
+
+## Heute
+
+Ich habe die Ziele von heute Morgen bearbeitet. Ich habe den Ton und die Leertaste getestet, und der Lern-Modus speichert jetzt meinen Punktestand. Auch die neue Erklärung zum Code habe ich gelesen. Dabei hatte ich wieder grosse Hilfe von KI.
+
+Ich hatte einen grossen Fehler: Die Leertaste hat nicht funktioniert. Das Feld blieb gelb, und es kam kein Buchstabe. Der Grund war, dass das Stoppen des Tons fast 1 Sekunde gedauert hat und das Programm so lange eingefroren war.
+
+Gelernt habe ich:
+- `SoundPlayer.Stop()` ist zu langsam. Mit `waveOut` von Windows stoppt der Ton sofort.
+- Mit JSON kann ich den Punktestand in einer Datei speichern und beim Start wieder laden.
+
+**Status:** fertig – die Leertaste erkennt jetzt „SOS SOS“ richtig.
+
+<img width="720" height="483" alt="image" src="https://github.com/user-attachments/assets/67422c05-33b5-4bb3-b03d-e26307acc461" />
+
+
+## Nächstes Mal
+
+- [ ] Einen kleinen Teil des Codes selbst ohne KI ändern
+- [ ] Mit Hilfe der KI die Datei `MorseAudio.cs` besser verstehen
+- [ ] Den Ton selbst anhören und die beste Tonhöhe finden
+- [ ] Im Lern-Modus alle 5 Stufen ausprobieren
+
+Danach will ich im Lern-Modus ganze Wörter üben.
 
 
