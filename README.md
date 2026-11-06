@@ -111,3 +111,31 @@ Als Nächstes geht's an die eigentliche Übersetzungslogik und die Benutzeroberf
 - [x] MorseAudio fertigstellen (Signalton für Punkt/Strich abspielen)
 - [x] Eingabe über die Leertaste einbauen (kurz = Punkt, lang = Strich)
 - [x] Lern-Modus einbauen
+
+# Lern-Periode-2
+
+# 06.11.2026 | Projekt: Morse-Übersetzer
+
+## Heute
+
+Ich habe den Morse-Übersetzer fertig gemacht. Er übersetzt Text in Morsecode und zurück und kann den Code als Ton abspielen. Mit der Leertaste kann ich selbst morsen: kurz ist ein Punkt, lang ein Strich. Im Lern-Modus übe ich die Buchstaben. Dabei hatte ich grosse Hilfe von KI.
+
+Ich hatte einige Fehler: Die Codetabelle stand in der falschen Datei, und die Umlaute waren kaputt.
+
+Gelernt habe ich:
+- Ein Strich ist 3-mal so lang wie ein Punkt.
+- Mit einer `Stopwatch` messe ich, wie lange die Leertaste gedrückt ist.
+
+**Status:** fertig – den Ton und die Leertaste muss ich noch testen.
+
+<img width="721" height="483" alt="image" src="https://github.com/user-attachments/assets/70dfb54e-bc95-4315-9f4d-7cfded9393fd" />
+
+
+## Nächstes Mal
+
+- [ ] Den Ton und die Leertaste testen
+- [ ] Mit Hilfe der KI den Code besser verstehen
+- [ ] Den Punktestand im Lern-Modus speicher     
+- [ ] Einen kleinen Teil des Codes selbst ohne KI ändern
+
+Danach will ich im Lern-Modus ganze Wörter üben.
