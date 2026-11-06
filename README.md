@@ -139,3 +139,6 @@ Gelernt habe ich:
 - [x] Einen kleinen Teil des Codes selbst ohne KI ändern
 
 Danach will ich im Lern-Modus ganze Wörter üben.
+
+
+
