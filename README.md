@@ -106,8 +106,8 @@ Ich habe mit dem Morsecode-Projekt angefangen und die Codetabelle erstellt, die 
 Als Nächstes geht's an die eigentliche Übersetzungslogik und die Benutzeroberfläche, danach an Lern-Modus und Chat-Funktionen.
 
 ## Nächstes Mal (5 Arbeitspakete)
-- [ ] Übersetzer Text ↔ Morse mit der Codetabelle fertigstellen
-- [ ] Form1-Oberfläche bauen (Textfeld, Übersetzen-Button, Anzeige)
-- [ ] MorseAudio fertigstellen (Signalton für Punkt/Strich abspielen)
-- [ ] Eingabe über die Leertaste einbauen (kurz = Punkt, lang = Strich)
-- [ ] Lern-Modus einbauen
+- [x] Übersetzer Text ↔ Morse mit der Codetabelle fertigstellen
+- [x] Form1-Oberfläche bauen (Textfeld, Übersetzen-Button, Anzeige)
+- [x] MorseAudio fertigstellen (Signalton für Punkt/Strich abspielen)
+- [x] Eingabe über die Leertaste einbauen (kurz = Punkt, lang = Strich)
+- [x] Lern-Modus einbauen
