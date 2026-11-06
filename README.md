@@ -133,9 +133,9 @@ Gelernt habe ich:
 
 ## Nächstes Mal
 
-- [ ] Den Ton und die Leertaste testen
-- [ ] Mit Hilfe der KI den Code besser verstehen
-- [ ] Den Punktestand im Lern-Modus speicher     
-- [ ] Einen kleinen Teil des Codes selbst ohne KI ändern
+- [x] Den Ton und die Leertaste testen
+- [x] Mit Hilfe der KI den Code besser verstehen
+- [x] Den Punktestand im Lern-Modus speicher     
+- [x] Einen kleinen Teil des Codes selbst ohne KI ändern
 
 Danach will ich im Lern-Modus ganze Wörter üben.
