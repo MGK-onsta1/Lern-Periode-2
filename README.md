@@ -172,7 +172,8 @@ Danach will ich im Lern-Modus ganze Wörter üben.
 ## Heute
 Ich habe heute nicht programmiert, sondern am Networking-Basics-Kurs weitergemacht. Ich habe Modul 2 komplett fertig gemacht.
 
-**Status:** Modul 2 abgeschlossen.
+**Status:** Modul 2 abgeschlossen, Quiz mit 100%.
+<img width="1919" height="949" alt="image" src="https://github.com/user-attachments/assets/d9446b30-85ad-4488-b43f-441ef1a75688" />
 
 ## Zusammenfassung
 Modul 2 ist durch – damit sind jetzt die ersten zwei Module vom Kurs erledigt.
