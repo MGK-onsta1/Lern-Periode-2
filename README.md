@@ -167,3 +167,22 @@ Gelernt habe ich:
 Danach will ich im Lern-Modus ganze Wörter üben.
 
 
+# 13.11.2026 | Kurs: Networking Basics (Cisco Networking Academy)
+
+## Heute
+Ich habe heute nicht programmiert, sondern am Networking-Basics-Kurs weitergemacht. Ich habe Modul 2 komplett fertig gemacht.
+
+**Status:** Modul 2 abgeschlossen.
+
+## Zusammenfassung
+Modul 2 ist durch – damit sind jetzt die ersten zwei Module vom Kurs erledigt.
+
+## Ausblick
+Als Nächstes kommt Modul 3. Die Module bauen vermutlich aufeinander auf, also lohnt es sich, bei Unklarheiten kurz in Modul 2 zurückzuschauen, bevor es weitergeht.
+
+## Nächstes Mal
+- [ ] Mit Modul 3 starten
+- [ ] Bei Bedarf Modul 2 nochmal repetieren
+- [ ] Am Morsecode-Projekt weitermachen (pausiert)
+
+
