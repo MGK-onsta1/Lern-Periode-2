@@ -227,6 +227,10 @@ Gelernt habe ich:
 ## Zusammenfassung
 Das Morse-Programm hat jetzt alles, was ich geplant hatte: Übersetzer, Leertasten-Eingabe, Lern-Modus mit Zeichen und Wörtern, verschlüsselten Chat (WLAN, Browser/QR-Code, Internet), Ton-Einstellungen und eine fertige `.exe` mit Anleitung.
 
+Ausserdem habe ich im Cisco-Kurs mit Modul 3 angefangen (Wireless and Mobile Networks).
+
+<img width="720" alt="Cisco-Kurs Modul 3" src="kurs-modul3.jpg" />
+
 ## Ausblick
 Als Nächstes will ich den Chat mit echten Laptops und Handys testen und die Fehler beheben, die dabei auftauchen. Danach soll man im Chat direkt mit der Leertaste morsen können, und ich will meinen Code besser verstehen.
 
