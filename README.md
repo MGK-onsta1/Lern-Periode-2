@@ -182,9 +182,9 @@ Modul 2 ist durch – damit sind jetzt die ersten zwei Module vom Kurs erledigt.
 Als Nächstes kommt Modul 3. Die Module bauen vermutlich aufeinander auf, also lohnt es sich, bei Unklarheiten kurz in Modul 2 zurückzuschauen, bevor es weitergeht.
 
 ## Nächstes Mal
-- [ ] Mit Modul 3 starten
-- [ ] Bei Bedarf Modul 2 nochmal repetieren
-- [ ] Am Morsecode-Projekt weitermachen (pausiert)
+- [x] Mit Modul 3 starten
+- [x] Bei Bedarf Modul 2 nochmal repetieren
+- [x] Am Morsecode-Projekt weitermachen (pausiert)
 
 
 # 20.11.2026 | Projekt: Morsecode-Programm (Chat)
