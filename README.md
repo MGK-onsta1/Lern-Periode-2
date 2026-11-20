@@ -202,7 +202,36 @@ Als Nächstes will ich das Programm mit Freunden in der Praxis testen, um zu seh
 
 ## Nächstes Mal
 - [ ] Praxistest mit Freunden machen
-- [ ] Ton-Einstellungen verbessern
-- [ ] Übung mit ganzen Wörtern einbauen
-- [ ] Chatverlauf speichern
-- [ ] Fertige .exe + Anleitung erstellen
+- [x] Ton-Einstellungen verbessern
+- [x] Übung mit ganzen Wörtern einbauen
+- [x] Chatverlauf speichern
+- [x] Fertige .exe + Anleitung erstellen
+
+# 20.11.2026 (Nachmittag) | Projekt: Morse-Übersetzer
+
+## Heute
+Der Chat war nur im alten Projekt `MorseCode`. Ich habe ihn in den Morse-Übersetzer übernommen, er ist ein neuer Tab „Chat“. Ausserdem habe ich die Ton-Einstellungen verbessert (Lautstärke und längere Pausen), eine Übung mit ganzen Wörtern eingebaut und den Chatverlauf speicherbar gemacht. Am Schluss habe ich eine fertige `Morse.exe` mit Anleitung erstellt. Dabei hatte ich wieder grosse Hilfe von KI.
+
+Weil mein Repository unordentlich war, hat das Programm jetzt ein eigenes Repository: **https://github.com/MGK-onsta1/Morse-Uebersetzer**. Dort gibt es auch die fertige `.exe` zum Herunterladen.
+
+Ich hatte einen Fehler: Im Chat-Tab war ein Button über einer Checkbox. Ich habe die Texte kürzer gemacht.
+
+Gelernt habe ich:
+- Mit `dotnet publish` und `--self-contained` wird eine `.exe` gemacht, die auch ohne installiertes .NET läuft.
+- Wenn man nur die Pausen länger macht (Farnsworth-Methode), hört man die Buchstaben beim Lernen besser.
+
+**Status:** fertig – 24 automatische Tests sind ok. Mit echten Freunden habe ich den Chat noch nicht getestet.
+
+<img width="720" alt="Chat-Tab" src="https://raw.githubusercontent.com/MGK-onsta1/Morse-Uebersetzer/main/screenshot-chat.png" />
+
+## Zusammenfassung
+Das Morse-Programm hat jetzt alles, was ich geplant hatte: Übersetzer, Leertasten-Eingabe, Lern-Modus mit Zeichen und Wörtern, verschlüsselten Chat (WLAN, Browser/QR-Code, Internet), Ton-Einstellungen und eine fertige `.exe` mit Anleitung.
+
+## Ausblick
+Als Nächstes will ich den Chat mit echten Laptops und Handys testen und die Fehler beheben, die dabei auftauchen. Danach soll man im Chat direkt mit der Leertaste morsen können, und ich will meinen Code besser verstehen.
+
+## Nächstes Mal (4 Arbeitspakete)
+- [ ] **AP 1 – Praxistest mit Freunden:** Chat über WLAN, Handy-Browser und Internet-Link testen und Fehler notieren
+- [ ] **AP 2 – Fehler beheben:** die gefundenen Fehler reparieren und eine neue `.exe` hochladen
+- [ ] **AP 3 – Morsetaste im Chat:** eine Nachricht nur mit der Leertaste schreiben und senden
+- [ ] **AP 4 – Code verstehen:** mit Hilfe der KI `ChatNode.cs` verstehen und einen kleinen Teil selbst ohne KI ändern
