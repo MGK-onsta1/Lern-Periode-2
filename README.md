@@ -187,3 +187,22 @@ Als Nächstes kommt Modul 3. Die Module bauen vermutlich aufeinander auf, also l
 - [ ] Am Morsecode-Projekt weitermachen (pausiert)
 
 
+# 20.11.2026 | Projekt: Morsecode-Programm (Chat)
+
+## Heute
+Ich habe heute mit Claude meine Morsecode-Projektdateien direkt am Laptop durchgeschaut, um zu sehen, wie weit der Chat-Teil schon ist. Dabei habe ich gesehen, dass ich den WLAN-Chat, den Internet-Chat und sogar einen Browser-Chat mit QR-Code schon fertig eingebaut habe, inklusive Verschlüsselung der Nachrichten.
+
+**Status:** Chat-Funktion (WLAN, Internet, Browser/QR) ist fertig und ins Programm eingebaut.
+
+## Zusammenfassung
+Übersetzer, Lern-Modus mit Fortschritt, Morsetaste mit Ton und Design sind fertig. Der Chat ist schon viel weiter als geplant: WLAN, Internet und sogar ein Browser-Chat mit QR-Code funktionieren bereits, und die Nachrichten sind verschlüsselt.
+
+## Ausblick
+Als Nächstes will ich das Programm mit Freunden in der Praxis testen, um zu sehen, wo es noch Fehler gibt. Danach will ich die Ton-Einstellungen verbessern, eine neue Übung mit ganzen Wörtern einbauen, den Chatverlauf speichern können und am Schluss eine fertige .exe mit Anleitung machen.
+
+## Nächstes Mal
+- [ ] Praxistest mit Freunden machen
+- [ ] Ton-Einstellungen verbessern
+- [ ] Übung mit ganzen Wörtern einbauen
+- [ ] Chatverlauf speichern
+- [ ] Fertige .exe + Anleitung erstellen
