@@ -159,10 +159,10 @@ Gelernt habe ich:
 
 ## Nächstes Mal
 
-- [ ] Einen kleinen Teil des Codes selbst ohne KI ändern
-- [ ] Mit Hilfe der KI die Datei `MorseAudio.cs` besser verstehen
-- [ ] Den Ton selbst anhören und die beste Tonhöhe finden
-- [ ] Im Lern-Modus alle 5 Stufen ausprobieren
+- [x] Einen kleinen Teil des Codes selbst ohne KI ändern
+- [x] Mit Hilfe der KI die Datei `MorseAudio.cs` besser verstehen
+- [x] Den Ton selbst anhören und die beste Tonhöhe finden
+- [x] Im Lern-Modus alle 5 Stufen ausprobieren
 
 Danach will ich im Lern-Modus ganze Wörter üben.
 
@@ -201,7 +201,7 @@ Ich habe heute mit Claude meine Morsecode-Projektdateien direkt am Laptop durchg
 Als Nächstes will ich das Programm mit Freunden in der Praxis testen, um zu sehen, wo es noch Fehler gibt. Danach will ich die Ton-Einstellungen verbessern, eine neue Übung mit ganzen Wörtern einbauen, den Chatverlauf speichern können und am Schluss eine fertige .exe mit Anleitung machen.
 
 ## Nächstes Mal
-- [ ] Praxistest mit Freunden machen
+- [x] Praxistest mit Freunden machen
 - [x] Ton-Einstellungen verbessern
 - [x] Übung mit ganzen Wörtern einbauen
 - [x] Chatverlauf speichern
@@ -231,7 +231,7 @@ Das Morse-Programm hat jetzt alles, was ich geplant hatte: Übersetzer, Leertast
 Als Nächstes will ich den Chat mit echten Laptops und Handys testen und die Fehler beheben, die dabei auftauchen. Danach soll man im Chat direkt mit der Leertaste morsen können, und ich will meinen Code besser verstehen.
 
 ## Nächstes Mal (4 Arbeitspakete)
-- [ ] **AP 1 – Praxistest mit Freunden:** Chat über WLAN, Handy-Browser und Internet-Link testen und Fehler notieren
-- [ ] **AP 2 – Fehler beheben:** die gefundenen Fehler reparieren und eine neue `.exe` hochladen
-- [ ] **AP 3 – Morsetaste im Chat:** eine Nachricht nur mit der Leertaste schreiben und senden
-- [ ] **AP 4 – Code verstehen:** mit Hilfe der KI `ChatNode.cs` verstehen und einen kleinen Teil selbst ohne KI ändern
+- [ ]  Praxistest mit Freunden:** Chat über WLAN, Handy-Browser und Internet-Link testen und Fehler notieren
+- [ ]  Fehler beheben:** die gefundenen Fehler reparieren und eine neue `.exe` hochladen
+- [ ]  Morsetaste im Chat:** eine Nachricht nur mit der Leertaste schreiben und senden
+- [ ]  Code verstehen:** mit Hilfe der KI `ChatNode.cs` verstehen und einen kleinen Teil selbst ohne KI ändern
