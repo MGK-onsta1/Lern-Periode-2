@@ -1,10 +1,10 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace MorseCode
+namespace Morse
 {
     /// <summary>
     /// Kleiner eingebauter Webserver: Freunde öffnen die Seite im Browser (Handy oder PC)
@@ -77,6 +77,14 @@ namespace MorseCode
         public void Notice(string text, Client? except = null)
         {
             foreach (var c in Clients.Where(c => c != except)) _ = c.SendAsync(new ChatNode.Packet("sys", "", text));
+        }
+
+        /// <summary>Schickt jedem Browser-Freund die aktuelle Liste, wer gerade online ist.</summary>
+        public void UpdateOnline()
+        {
+            var names = OnlineNames().Distinct().ToList();
+            foreach (var c in Clients)
+                _ = c.SendAsync(new ChatNode.Packet("online", "", string.Join(", ", names.Where(n => n != c.Name))));
         }
 
         private async Task AcceptLoop(TcpListener listener, CancellationToken ct)

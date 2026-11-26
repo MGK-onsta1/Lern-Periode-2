@@ -5,6 +5,7 @@
         private readonly MorseAudio _audio = new();
         private readonly MorseKeyer _keyer = new();
         private readonly LearnTrainer _trainer = new();
+        private readonly AppSettings _settings = AppSettings.Load();
 
         /// <summary>Eingegebene Buchstaben-Codes der Leertasten-Eingabe; "/" steht für eine Wortpause.</summary>
         private readonly List<string> _keyedTokens = new();
@@ -12,10 +13,19 @@
         /// <summary>Gibt es gerade eine offene Aufgabe im Lern-Modus?</summary>
         private bool _learnActive;
         private bool _learnStarted;
+        private bool _loadingSettings;
+
+        /// <summary>Im Wort-Modus mit Leertaste: die bisher gemorsten Buchstaben-Codes.</summary>
+        private readonly List<string> _learnWordCodes = new();
 
         private const int ModeKeySpace = 0;   // Zeichen sehen → mit Leertaste morsen
         private const int ModeListen = 1;     // Morse hören → Zeichen tippen
         private const int ModeRead = 2;       // Morse lesen → Zeichen tippen
+        private const int ModeWordListen = 3; // Wort hören → Wort tippen
+        private const int ModeWordKey = 4;    // Wort sehen → mit Leertaste morsen
+
+        private bool IsWordMode => cmbLearnMode.SelectedIndex is ModeWordListen or ModeWordKey;
+        private bool IsKeyMode => cmbLearnMode.SelectedIndex is ModeKeySpace or ModeWordKey;
 
         public Form1()
         {
@@ -24,6 +34,7 @@
             _keyer.SymbolAdded += Keyer_SymbolAdded;
             _keyer.LetterCompleted += Keyer_LetterCompleted;
             _keyer.WordCompleted += Keyer_WordCompleted;
+            txtLearnAnswer.KeyDown += txtLearnAnswer_KeyDown;
         }
 
         private void Form1_Load(object? sender, EventArgs e)
@@ -33,15 +44,26 @@
                 "Zeichen sehen → mit Leertaste morsen",
                 "Morse hören → Zeichen tippen",
                 "Morse lesen → Zeichen tippen",
+                "Wort hören → Wort tippen",
+                "Wort sehen → mit Leertaste morsen",
             });
             foreach (var level in LearnTrainer.Levels)
                 cmbLevel.Items.Add(level.Name);
             cmbLearnMode.SelectedIndex = 0;
             cmbLevel.SelectedIndex = 0;
 
+            // gespeicherte Einstellungen in die Regler übernehmen
+            _loadingSettings = true;
+            numWpm.Value = Math.Clamp(_settings.Wpm, (int)numWpm.Minimum, (int)numWpm.Maximum);
+            numFreq.Value = Math.Clamp(_settings.Frequency, (int)numFreq.Minimum, (int)numFreq.Maximum);
+            trackVolume.Value = Math.Clamp(_settings.Volume, trackVolume.Minimum, trackVolume.Maximum);
+            numGap.Value = Math.Clamp(_settings.GapFactor, numGap.Minimum, numGap.Maximum);
+            _loadingSettings = false;
+
             ApplySettings();
             _trainer.Load();   // gespeicherten Punktestand laden
             UpdateScore();
+            InitChat();
             timerKeyer.Start();
         }
 
@@ -49,14 +71,37 @@
 
         private void numWpm_ValueChanged(object? sender, EventArgs e) => ApplySettings();
         private void numFreq_ValueChanged(object? sender, EventArgs e) => ApplySettings();
+        private void settings_Changed(object? sender, EventArgs e) => ApplySettings();
 
         private void ApplySettings()
         {
+            if (_loadingSettings) return;
+
             _audio.Wpm = (int)numWpm.Value;
             _audio.Frequency = (int)numFreq.Value;
+            _audio.Volume = trackVolume.Value;
+            _audio.GapFactor = (double)numGap.Value;
             _keyer.UnitMs = _audio.UnitMs;
+            _keyer.GapFactor = _audio.GapFactor;
+
+            string gapInfo = numGap.Value > 1
+                ? $"   Pausen {numGap.Value:0.0}× länger (zum Lernen)"
+                : "";
             lblUnit.Text = $"Punkt = {_audio.UnitMs:0} ms   Strich = {_audio.UnitMs * 3:0} ms   " +
-                           $"(Strich ab {_audio.UnitMs * 2:0} ms Drücken)";
+                           $"(Strich ab {_audio.UnitMs * 2:0} ms Drücken)   Lautstärke {trackVolume.Value} %{gapInfo}";
+
+            _settings.Wpm = (int)numWpm.Value;
+            _settings.Frequency = (int)numFreq.Value;
+            _settings.Volume = trackVolume.Value;
+            _settings.GapFactor = numGap.Value;
+            _settings.Save();
+        }
+
+        private void btnTestTone_Click(object? sender, EventArgs e)
+        {
+            _audio.Play(MorseTable.TextToMorse("MORSE"));
+            SetStatus("Test: „MORSE“ wird mit den aktuellen Ton-Einstellungen abgespielt.");
+            ActiveControl = null;
         }
 
         private void tabMain_SelectedIndexChanged(object? sender, EventArgs e)
@@ -67,7 +112,7 @@
             ShowKeyPressed(false);
             lblCurrentCode.Text = "";
             lblLearnInput.Text = "";
-            if (tabMain.SelectedTab == tabLearn && cmbLearnMode.SelectedIndex != ModeKeySpace)
+            if (tabMain.SelectedTab == tabLearn && !IsKeyMode)
                 txtLearnAnswer.Focus();
         }
 
@@ -168,7 +213,8 @@
         /// <summary>Soll die Leertaste gerade als Morsetaste dienen?</summary>
         private bool SpaceIsMorseKey =>
             tabMain.SelectedTab == tabKey ||
-            (tabMain.SelectedTab == tabLearn && cmbLearnMode.SelectedIndex == ModeKeySpace);
+            (tabMain.SelectedTab == tabLearn && IsKeyMode) ||
+            ChatKeyActive;
 
         private void Form1_KeyDown(object? sender, KeyEventArgs e)
         {
@@ -195,6 +241,7 @@
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             _trainer.Save();   // beim Schliessen sicherheitshalber nochmal speichern
+            ShutdownChat();
             base.OnFormClosing(e);
         }
 
@@ -223,10 +270,18 @@
         private void Keyer_SymbolAdded(char symbol)
         {
             string pretty = MorseTable.Pretty(_keyer.CurrentCode);
-            if (tabMain.SelectedTab == tabKey)
+            if (ChatKeyActive)
+            {
+                ShowChatKeyInput(_keyer.CurrentCode);
+            }
+            else if (tabMain.SelectedTab == tabKey)
             {
                 lblCurrentCode.Text = pretty;
                 lblKeyState.Text = symbol == '.' ? "·  Punkt" : "−  Strich";
+            }
+            else if (cmbLearnMode.SelectedIndex == ModeWordKey)
+            {
+                ShowLearnWordInput(_keyer.CurrentCode);
             }
             else
             {
@@ -236,7 +291,11 @@
 
         private void Keyer_LetterCompleted(string code)
         {
-            if (tabMain.SelectedTab == tabKey)
+            if (ChatKeyActive)
+            {
+                ChatKeyToken(code);
+            }
+            else if (tabMain.SelectedTab == tabKey)
             {
                 _keyedTokens.Add(code);
                 lblCurrentCode.Text = "";
@@ -245,12 +304,35 @@
             }
             else if (tabMain.SelectedTab == tabLearn && _learnActive)
             {
-                CheckLearnAnswer(code: code);
+                if (cmbLearnMode.SelectedIndex == ModeWordKey)
+                {
+                    _learnWordCodes.Add(code);
+                    ShowLearnWordInput("");
+                }
+                else
+                {
+                    CheckLearnAnswer(code: code);
+                }
             }
+        }
+
+        /// <summary>Zeigt im Wort-Modus die schon gemorsten Buchstaben an (plus den aktuellen Code).</summary>
+        private void ShowLearnWordInput(string current)
+        {
+            string letters = MorseTable.MorseToText(string.Join(" ", _learnWordCodes));
+            string codes = MorseTable.Pretty(string.Join(" ", _learnWordCodes.Append(current)).Trim());
+            lblLearnInput.Text = letters.Length == 0 ? codes : $"{letters}   {codes}";
         }
 
         private void Keyer_WordCompleted()
         {
+            if (ChatKeyActive) { ChatKeyToken("/"); return; }
+            if (tabMain.SelectedTab == tabLearn && cmbLearnMode.SelectedIndex == ModeWordKey
+                && _learnActive && _learnWordCodes.Count > 0)
+            {
+                CheckWordAnswer(codes: _learnWordCodes);
+                return;
+            }
             if (tabMain.SelectedTab != tabKey) return;
             if (_keyedTokens.Count > 0 && _keyedTokens[^1] != "/")
             {
@@ -298,16 +380,26 @@
         private void cmbLearnMode_SelectedIndexChanged(object? sender, EventArgs e)
         {
             int mode = cmbLearnMode.SelectedIndex;
-            bool typing = mode != ModeKeySpace;
+            bool typing = !IsKeyMode;
             lblAnswerCaption.Visible = typing;
             txtLearnAnswer.Visible = typing;
+
+            // Für ganze Wörter braucht das Antwortfeld mehr Platz
+            txtLearnAnswer.MaxLength = IsWordMode ? 30 : 1;
+            txtLearnAnswer.Width = IsWordMode ? 240 : 50;
+            txtLearnAnswer.TextAlign = IsWordMode ? HorizontalAlignment.Left : HorizontalAlignment.Center;
+            lblAnswerCaption.Text = IsWordMode ? "Deine Antwort (Wort + Enter):" : "Deine Antwort (Zeichen tippen):";
 
             lblLearnHelp.Text = mode switch
             {
                 ModeKeySpace => "Oben erscheint ein Zeichen. Morse es mit der LEERTASTE (kurz = Punkt, lang = Strich). " +
                                 "Nach einer kurzen Pause wird automatisch geprüft.",
                 ModeListen => "Du hörst ein Morsezeichen. Tippe den passenden Buchstaben bzw. die Ziffer ins Antwortfeld.",
-                _ => "Oben steht ein Morsecode. Tippe den passenden Buchstaben bzw. die Ziffer ins Antwortfeld.",
+                ModeRead => "Oben steht ein Morsecode. Tippe den passenden Buchstaben bzw. die Ziffer ins Antwortfeld.",
+                ModeWordListen => "Du hörst ein ganzes Wort. Tippe es ins Antwortfeld und drücke Enter. " +
+                                  "Tipp: Oben „Pausen ×“ auf 2 stellen, dann hörst du die Buchstaben besser.",
+                _ => "Oben steht ein Wort. Morse es Buchstabe für Buchstabe mit der LEERTASTE. " +
+                     "Nach einer langen Pause (Wortpause) wird geprüft.",
             };
             StopLearning();
         }
@@ -351,13 +443,32 @@
             timerLearnNext.Stop();
             _keyer.Reset();
             _learnStarted = true;
-
-            char c = _trainer.Next();
-            string code = _trainer.CurrentCode;
+            _learnWordCodes.Clear();
 
             lblFeedback.Text = "";
             lblLearnInput.Text = "";
             SetLearnAnswerSilently("");
+
+            if (IsWordMode)
+            {
+                string word = _trainer.NextWord();
+                if (cmbLearnMode.SelectedIndex == ModeWordListen)
+                {
+                    lblChallenge.Text = $"🔊 ? ({word.Length} Zeichen)";
+                    _audio.Play(_trainer.CurrentWordCode);
+                    txtLearnAnswer.Focus();
+                }
+                else
+                {
+                    lblChallenge.Text = word;
+                    ActiveControl = null;
+                }
+                _learnActive = true;
+                return;
+            }
+
+            char c = _trainer.Next();
+            string code = _trainer.CurrentCode;
 
             switch (cmbLearnMode.SelectedIndex)
             {
@@ -380,8 +491,47 @@
 
         private void txtLearnAnswer_TextChanged(object? sender, EventArgs e)
         {
-            if (!_learnActive || txtLearnAnswer.TextLength == 0) return;
+            if (!_learnActive || IsWordMode || txtLearnAnswer.TextLength == 0) return;
             CheckLearnAnswer(typed: txtLearnAnswer.Text[0]);
+        }
+
+        private void txtLearnAnswer_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || !IsWordMode) return;
+            e.Handled = e.SuppressKeyPress = true; // kein "Ding"-Ton
+            if (_learnActive && txtLearnAnswer.Text.Trim().Length > 0)
+                CheckWordAnswer(typed: txtLearnAnswer.Text);
+        }
+
+        private void CheckWordAnswer(string? typed = null, List<string>? codes = null)
+        {
+            _learnActive = false;
+            string word = _trainer.CurrentWord;
+            string wordCode = MorseTable.Pretty(_trainer.CurrentWordCode);
+
+            bool ok = typed != null ? _trainer.CheckWord(typed) : _trainer.CheckWordCodes(codes!);
+            string yours = typed != null
+                ? typed.Trim().ToUpperInvariant()
+                : MorseTable.MorseToText(string.Join(" ", codes!));
+
+            if (ok)
+            {
+                lblFeedback.ForeColor = Color.ForestGreen;
+                lblFeedback.Text = $"✔ Richtig!  {word}";
+            }
+            else
+            {
+                lblFeedback.ForeColor = Color.Firebrick;
+                lblFeedback.Text = $"✘ Falsch. Du hattest „{yours}“ – richtig ist „{word}“";
+                _audio.Play(_trainer.CurrentWordCode);
+            }
+            lblChallenge.Text = word;
+            lblLearnInput.Text = wordCode;
+
+            UpdateScore();
+            _trainer.Save();
+            timerLearnNext.Interval = ok ? 1800 : 3500;
+            timerLearnNext.Start();
         }
 
         private void CheckLearnAnswer(string? code = null, char? typed = null)
@@ -419,17 +569,19 @@
         private void btnLearnRepeat_Click(object? sender, EventArgs e)
         {
             if (!_learnStarted) return;
-            _audio.Play(_trainer.CurrentCode);
+            _audio.Play(IsWordMode ? _trainer.CurrentWordCode : _trainer.CurrentCode);
             RestoreLearnFocus();
         }
 
         private void btnLearnHint_Click(object? sender, EventArgs e)
         {
             if (!_learnStarted) return;
-            string code = _trainer.CurrentCode;
+            string code = IsWordMode ? _trainer.CurrentWordCode : _trainer.CurrentCode;
             lblFeedback.ForeColor = Color.DarkGoldenrod;
             lblFeedback.Text = cmbLearnMode.SelectedIndex switch
             {
+                ModeWordListen => $"💡 Das Wort beginnt mit „{_trainer.CurrentWord[0]}“ und hat {_trainer.CurrentWord.Length} Zeichen.",
+                ModeWordKey => $"💡 {MorseTable.Pretty(code)}",
                 ModeKeySpace => $"💡 {_trainer.Current} = {MorseTable.Pretty(code)}",
                 ModeListen => $"💡 Das war: {MorseTable.Pretty(code)}",
                 _ => "💡 Kommt in Frage: " + string.Join(" ", _trainer.Chars.Where(ch => MorseTable.Codes[ch].Length == code.Length && MorseTable.Codes[ch][0] == code[0])),
@@ -447,7 +599,7 @@
 
         private void RestoreLearnFocus()
         {
-            if (cmbLearnMode.SelectedIndex != ModeKeySpace) txtLearnAnswer.Focus();
+            if (!IsKeyMode) txtLearnAnswer.Focus();
             else ActiveControl = null;
         }
 

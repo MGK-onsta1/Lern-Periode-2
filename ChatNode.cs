@@ -1,10 +1,10 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace MorseCode
+namespace Morse
 {
     /// <summary>
     /// Direkte Verbindung zwischen zwei (oder mehr) Rechnern per TCP – ohne Server dazwischen.
@@ -181,6 +181,11 @@ namespace MorseCode
                     }
                 }
                 catch (Exception) { }
+
+                // Der andere hat die Verbindung zugemacht, bevor er „hallo“ sagen konnte.
+                // Das passiert vor allem, wenn sein Passwort nicht zu unserem passt.
+                if (reason == null && Name == null)
+                    reason = $"Verbindung zu {Endpoint} abgebrochen – habt ihr beide dasselbe Passwort?";
                 Close();
                 _node.OnClosed(this, reason);
             }

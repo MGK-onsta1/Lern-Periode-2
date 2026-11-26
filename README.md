@@ -236,6 +236,34 @@ Als Nächstes will ich den Chat mit echten Laptops und Handys testen und die Feh
 
 ## Nächstes Mal (4 Arbeitspakete)
 - [ ]  Praxistest mit Freunden:** Chat über WLAN, Handy-Browser und Internet-Link testen und Fehler notieren
-- [ ]  Fehler beheben:** die gefundenen Fehler reparieren und eine neue `.exe` hochladen
-- [ ]  Morsetaste im Chat:** eine Nachricht nur mit der Leertaste schreiben und senden
+- [x]  Fehler beheben:** die gefundenen Fehler reparieren und eine neue `.exe` hochladen
+- [x]  Morsetaste im Chat:** eine Nachricht nur mit der Leertaste schreiben und senden
 - [ ]  Code verstehen:** mit Hilfe der KI `ChatNode.cs` verstehen und einen kleinen Teil selbst ohne KI ändern
+
+# 26.11.2026 | Projekt: Morse-Übersetzer
+
+## Heute
+Heute habe ich den Chat getestet. Meine Freunde waren nicht da, darum habe ich mit der KI einen „Test-Freund“ gebaut, der sich wie ein zweiter Laptop über WLAN verbindet. Den Browser-Chat und den Internet-Link habe ich im Browser ausprobiert. Die Nachrichten kamen überall an. Neu kann man im Chat **direkt mit der Leertaste morsen**: Haken setzen, morsen, mit der Rücktaste löschen und mit Enter senden. Am Schluss habe ich die Version 1.1 als neue `Morse.exe` gemacht und auf GitHub hochgeladen: **https://github.com/MGK-onsta1/Morse-Uebersetzer**. Dabei hatte ich wieder grosse Hilfe von KI.
+
+Ich hatte einige Fehler: Bei einem falschen Passwort hat man bei mir nichts gesehen. Im Browser stand oben nicht, wer neu dazugekommen ist. Wenn das Programm zweimal offen war, kam eine englische Fehlermeldung. Im kleinen Fenster hat eine Checkbox den Knopf „Als Text…“ verdeckt. Alle vier Fehler sind behoben.
+
+Gelernt habe ich:
+- Eine TCP-Verbindung kann auch ohne Fehler zugehen. Darum muss man nach der `while`-Schleife prüfen, ob der Freund schon `hello` gesagt hat.
+- Mit `catch (SocketException ex) when (...)` fängt man nur einen bestimmten Fehler ab, z. B. `AddressAlreadyInUse`.
+- `-p:EnableCompressionInSingleFile=true` macht die `.exe` etwa halb so gross (72 MB statt 154 MB).
+
+**Status:** fertig – WLAN, Browser, Internet-Link und Morsetaste im Chat funktionieren auf meinem PC. Mit echten Freunden und einem echten Handy habe ich es noch nicht getestet.
+
+<img width="720" alt="Morsetaste im Chat" src="https://raw.githubusercontent.com/MGK-onsta1/Morse-Uebersetzer/main/screenshot-morsetaste.jpg" />
+
+## Zusammenfassung
+Von den 4 Arbeitspaketen habe ich drei geschafft: Fehler beheben, Morsetaste im Chat und die Erklärung von `ChatNode.cs` (steht in der [Code-Erklärung](https://github.com/MGK-onsta1/Morse-Uebersetzer/blob/main/CODE-ERKLAERUNG.md)). Den Praxistest habe ich nur auf meinem PC mit einem Test-Freund gemacht. Die Dateien, die ich heute geändert habe (`ChatNode.cs`, `WebBridge.cs`, `Form1.cs`, `Form1.Chat.cs`), sind hier in der neuen Version.
+
+## Ausblick
+Als Nächstes will ich den Chat endlich mit echten Freunden und Handys testen. Ausserdem will ich zeigen, dass ich `ChatNode.cs` verstehe, indem ich die Testfragen beantworte und selbst etwas ohne KI ändere.
+
+## Nächstes Mal (4 Arbeitspakete)
+- [ ] **Praxistest mit Freunden:** Chat über WLAN, Handy-Browser und Internet-Link mit echten Geräten testen und Fehler notieren
+- [ ] **Fehler beheben:** die gefundenen Fehler reparieren und eine neue `.exe` hochladen
+- [ ] **Code verstehen:** die 3 Testfragen zu `ChatNode.cs` in der Code-Erklärung beantworten
+- [ ] **Selbst ändern:** Aufgabe 5 oder 6 aus der Code-Erklärung ohne KI lösen
