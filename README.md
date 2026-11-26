@@ -243,9 +243,22 @@ Als Nächstes will ich den Chat mit echten Laptops und Handys testen und die Feh
 # 26.11.2026 | Projekt: Morse-Übersetzer
 
 ## Heute
-Heute habe ich den Chat getestet. Meine Freunde waren nicht da, darum habe ich mit der KI einen „Test-Freund“ gebaut, der sich wie ein zweiter Laptop über WLAN verbindet. Den Browser-Chat und den Internet-Link habe ich im Browser ausprobiert. Die Nachrichten kamen überall an. Neu kann man im Chat **direkt mit der Leertaste morsen**: Haken setzen, morsen, mit der Rücktaste löschen und mit Enter senden. Am Schluss habe ich die Version 1.1 als neue `Morse.exe` gemacht und auf GitHub hochgeladen: **https://github.com/MGK-onsta1/Morse-Uebersetzer**. Dabei hatte ich wieder grosse Hilfe von KI.
+Heute habe ich die 4 Arbeitspakete vom letzten Mal im Morse-Übersetzer gemacht. Weil meine Freunde nicht da waren, habe ich mit der KI drei „Test-Freunde“ gemacht: **Ben** verbindet sich über WLAN, **Lea** öffnet den Chat im Browser wie auf einem Handy und **Tim** kommt über den Internet-Link. Alle Nachrichten kamen bei allen an. Neu kann man im Chat **direkt mit der Leertaste morsen**: Haken setzen, morsen, mit der Rücktaste löschen und mit Enter senden. Am Schluss habe ich die Version **1.1.1** als neue `Morse.exe` gemacht: **https://github.com/MGK-onsta1/Morse-Uebersetzer**. Dabei hatte ich wieder grosse Hilfe von KI.
 
-Ich hatte einige Fehler: Bei einem falschen Passwort hat man bei mir nichts gesehen. Im Browser stand oben nicht, wer neu dazugekommen ist. Wenn das Programm zweimal offen war, kam eine englische Fehlermeldung. Im kleinen Fenster hat eine Checkbox den Knopf „Als Text…“ verdeckt. Alle vier Fehler sind behoben.
+<img width="720" alt="Chat-Test mit WLAN, Browser und Internet" src="bilder/2611-ap1-chat-test.jpg" />
+
+<img width="720" alt="Lea im Handy-Browser" src="bilder/2611-ap1-handy-browser.jpg" />
+
+Ich hatte einige Fehler:
+- Bei einem falschen Passwort hat man bei mir nichts gesehen.
+- Im Browser stand oben nicht, wer neu dazugekommen ist.
+- Wenn das Programm zweimal offen war, kam eine englische Fehlermeldung.
+- Im kleinen Fenster hat eine Checkbox den Knopf „Als Text…“ verdeckt.
+- Beim Morsen im Chat hat die Rücktaste nach einer Pause scheinbar nichts gemacht, weil sie zuerst eine unsichtbare Wortlücke `/` gelöscht hat.
+
+Alle fünf Fehler sind behoben.
+
+<img width="720" alt="Behobene Fehlermeldungen" src="bilder/2611-ap2-fehler-behoben.jpg" />
 
 Gelernt habe ich:
 - Eine TCP-Verbindung kann auch ohne Fehler zugehen. Darum muss man nach der `while`-Schleife prüfen, ob der Freund schon `hello` gesagt hat.
@@ -254,10 +267,14 @@ Gelernt habe ich:
 
 **Status:** fertig – WLAN, Browser, Internet-Link und Morsetaste im Chat funktionieren auf meinem PC. Mit echten Freunden und einem echten Handy habe ich es noch nicht getestet.
 
-<img width="720" alt="Morsetaste im Chat" src="https://raw.githubusercontent.com/MGK-onsta1/Morse-Uebersetzer/main/screenshot-morsetaste.jpg" />
+<img width="720" alt="Morsetaste im Chat" src="bilder/2611-ap3-morsetaste.jpg" />
+
+<img width="720" alt="Die gemorste Nachricht kommt im Browser an" src="bilder/2611-ap3-angekommen.jpg" />
 
 ## Zusammenfassung
-Von den 4 Arbeitspaketen habe ich drei geschafft: Fehler beheben, Morsetaste im Chat und die Erklärung von `ChatNode.cs` (steht in der [Code-Erklärung](https://github.com/MGK-onsta1/Morse-Uebersetzer/blob/main/CODE-ERKLAERUNG.md)). Den Praxistest habe ich nur auf meinem PC mit einem Test-Freund gemacht. Die Dateien, die ich heute geändert habe (`ChatNode.cs`, `WebBridge.cs`, `Form1.cs`, `Form1.Chat.cs`), sind hier in der neuen Version.
+Von den 4 Arbeitspaketen habe ich drei ganz geschafft: Fehler beheben, Morsetaste im Chat und die Erklärung von `ChatNode.cs`. Die Erklärung steht in der [Code-Erklärung](https://github.com/MGK-onsta1/Morse-Uebersetzer/blob/main/CODE-ERKLAERUNG.md). Den Praxistest habe ich nur auf meinem PC mit Test-Freunden gemacht. Den Teil „selbst ohne KI ändern“ muss ich noch machen.
+
+<img width="720" alt="Erklärung von ChatNode.cs" src="bilder/2611-ap4-chatnode-erklaert.jpg" />
 
 ## Ausblick
 Als Nächstes will ich den Chat endlich mit echten Freunden und Handys testen. Ausserdem will ich zeigen, dass ich `ChatNode.cs` verstehe, indem ich die Testfragen beantworte und selbst etwas ohne KI ändere.
