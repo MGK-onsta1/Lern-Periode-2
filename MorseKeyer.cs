@@ -21,6 +21,9 @@ namespace Morse
         /// <summary>Länge einer Einheit in ms (kommt aus dem eingestellten Tempo).</summary>
         public double UnitMs { get; set; } = 100;
 
+        /// <summary>Pausen-Faktor (1 = normal). Größer = mehr Zeit zwischen Buchstaben/Wörtern.</summary>
+        public double GapFactor { get; set; } = 1.0;
+
         /// <summary>Punkte/Striche des Buchstabens, der gerade eingegeben wird.</summary>
         public string CurrentCode { get; private set; } = "";
 
@@ -59,7 +62,8 @@ namespace Morse
             if (IsPressed || !_pauseWatch.IsRunning) return;
             double pause = _pauseWatch.Elapsed.TotalMilliseconds;
 
-            if (CurrentCode.Length > 0 && pause >= 3 * UnitMs)
+            double gap = Math.Max(1.0, GapFactor);
+            if (CurrentCode.Length > 0 && pause >= 3 * UnitMs * gap)
             {
                 string code = CurrentCode;
                 CurrentCode = "";
@@ -67,7 +71,7 @@ namespace Morse
                 LetterCompleted?.Invoke(code);
             }
 
-            if (_wordPending && pause >= 7 * UnitMs)
+            if (_wordPending && pause >= 7 * UnitMs * gap)
             {
                 _wordPending = false;
                 _pauseWatch.Reset();

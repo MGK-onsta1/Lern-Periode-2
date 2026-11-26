@@ -243,7 +243,9 @@ Als Nächstes will ich den Chat mit echten Laptops und Handys testen und die Feh
 # 26.11.2026 | Projekt: Morse-Übersetzer
 
 ## Heute
-Heute habe ich die 4 Arbeitspakete vom letzten Mal im Morse-Übersetzer gemacht. Weil meine Freunde nicht da waren, habe ich mit der KI drei „Test-Freunde“ gemacht: **Ben** verbindet sich über WLAN, **Lea** öffnet den Chat im Browser wie auf einem Handy und **Tim** kommt über den Internet-Link. Alle Nachrichten kamen bei allen an. Neu kann man im Chat **direkt mit der Leertaste morsen**: Haken setzen, morsen, mit der Rücktaste löschen und mit Enter senden. Am Schluss habe ich die Version **1.1.1** als neue `Morse.exe` gemacht: **https://github.com/MGK-onsta1/Morse-Uebersetzer**. Dabei hatte ich wieder grosse Hilfe von KI.
+Heute habe ich die 4 Arbeitspakete vom letzten Mal im Morse-Übersetzer gemacht. Weil meine Freunde nicht da waren, habe ich mit der KI drei „Test-Freunde“ gemacht: **Ben** verbindet sich über WLAN, **Lea** öffnet den Chat im Browser wie auf einem Handy und **Tim** kommt über den Internet-Link. Alle Nachrichten kamen bei allen an. Neu kann man im Chat **direkt mit der Leertaste morsen**: Haken setzen, morsen, mit der Rücktaste löschen und mit Enter senden. Am Schluss habe ich die Version **1.1.1** als neue `Morse.exe` gemacht: **https://github.com/MGK-onsta1/Morse-Uebersetzer**. Den ganzen Code vom Morse-Übersetzer (ohne Download) gibt es jetzt auch hier in Lern-Periode-2.
+
+**Hilfe:** Bei dieser Sitzung hat mir **Claude** (eine KI von Anthropic) sehr geholfen: beim Programmieren, Testen, bei den Screenshots und beim Schreiben von diesem Eintrag.
 
 <img width="720" alt="Chat-Test mit WLAN, Browser und Internet" src="bilder/2611-ap1-chat-test.jpg" />
 

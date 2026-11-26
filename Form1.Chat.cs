@@ -575,8 +575,12 @@ namespace Morse
 
         private void ChatKeyBackspace()
         {
-            if (_keyer.CurrentCode.Length > 0) _keyer.Reset();
-            else if (_chatKeyTokens.Count > 0) _chatKeyTokens.RemoveAt(_chatKeyTokens.Count - 1);
+            if (_keyer.CurrentCode.Length > 0) { _keyer.Reset(); ShowChatKeyInput(""); return; }
+
+            // Eine Wortpause „/“ am Ende sieht man im Text nicht. Damit die Rücktaste nicht
+            // „nichts“ zu tun scheint, wird die Pause zusammen mit dem Buchstaben davor gelöscht.
+            while (_chatKeyTokens.Count > 0 && _chatKeyTokens[^1] == "/") _chatKeyTokens.RemoveAt(_chatKeyTokens.Count - 1);
+            if (_chatKeyTokens.Count > 0) _chatKeyTokens.RemoveAt(_chatKeyTokens.Count - 1);
             ShowChatKeyInput("");
         }
 

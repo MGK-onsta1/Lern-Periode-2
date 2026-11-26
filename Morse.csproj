@@ -6,6 +6,19 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyTitle>Morse-Übersetzer</AssemblyTitle>
+    <Version>1.1.1</Version>
   </PropertyGroup>
+
+  <!-- Webseite und Schrift für den Browser-Chat werden ins Programm eingebaut -->
+  <ItemGroup>
+    <EmbeddedResource Include="web\index.html" LogicalName="Morse.web.index.html" />
+    <EmbeddedResource Include="fonts\PressStart2P-Regular.ttf" LogicalName="Morse.fonts.PressStart2P.ttf" />
+  </ItemGroup>
+
+  <!-- QR-Code für den Browser-Link -->
+  <ItemGroup>
+    <PackageReference Include="QRCoder" Version="1.6.0" />
+  </ItemGroup>
 
 </Project>

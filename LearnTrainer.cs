@@ -16,6 +16,26 @@ namespace Morse
             ("Stufe 5: alles inkl. Umlaute & Satzzeichen", new string(MorseTable.Codes.Keys.ToArray())),
         };
 
+        /// <summary>
+        /// Übungswörter. Pro Stufe werden nur Wörter benutzt, deren Buchstaben man schon gelernt hat.
+        /// </summary>
+        public static readonly string[] Words =
+        {
+            // nur E T I A N M (Stufe 1)
+            "AN", "AM", "IN", "MIT", "TEAM", "NAME", "MANN", "NEIN", "EIN", "MEIN", "TEE", "NETT",
+            "TANTE", "ENTE", "ATEM", "MINE", "TANNE", "MATTE", "AMEN", "TAT",
+            // + S O K R D U G W (Stufe 2)
+            "SOS", "ROT", "GUT", "WIND", "MOND", "STERN", "DORT", "KUNST", "ROSE", "MUSIK", "WORT",
+            "TAG", "DU", "DER", "DIE", "DAS", "UND", "ODER", "NUR", "GRAU", "KANU", "WAGEN", "STADT",
+            // alle Buchstaben (Stufe 3)
+            "HALLO", "MORSE", "FUNK", "SCHULE", "HAUS", "BAUM", "WASSER", "FREUND", "SONNE", "ZEIT",
+            "CHAT", "LICHT", "BUCH", "HILFE", "PIZZA", "BLITZ", "COMPUTER", "JAHR", "VOGEL", "QUIZ", "XYLOFON",
+            // mit Ziffern (Stufe 4)
+            "112", "2026", "007", "SOS1", "R2D2", "4U",
+            // Umlaute und Satzzeichen (Stufe 5)
+            "GRÜN", "SCHÖN", "FRÜH", "MÄDCHEN", "GRÜSSE", "HALLO!", "OK?", "JA.",
+        };
+
         private readonly Random _random = new();
         private readonly Dictionary<char, int> _mistakes = new();
 
@@ -41,6 +61,62 @@ namespace Morse
             }
             Current = pool[_random.Next(pool.Count)];
             return Current;
+        }
+
+        // ---------------------------------------------------------------- Wörter
+
+        /// <summary>Das aktuelle Übungswort (nur im Wort-Modus).</summary>
+        public string CurrentWord { get; private set; } = "";
+
+        /// <summary>Morsecode des aktuellen Wortes, Buchstaben durch Leerzeichen getrennt.</summary>
+        public string CurrentWordCode => MorseTable.TextToMorse(CurrentWord);
+
+        /// <summary>Wörter, die nur aus Zeichen der aktuellen Stufe bestehen.</summary>
+        public List<string> WordsForLevel() => Words.Where(w => w.All(c => Chars.Contains(c))).ToList();
+
+        public string NextWord()
+        {
+            var words = WordsForLevel();
+            if (words.Count == 0) words = Words.ToList();
+            if (words.Count > 1) words.Remove(CurrentWord);
+
+            // Wörter mit Buchstaben, die oft falsch waren, bekommen mehr Lose
+            var pool = new List<string>();
+            foreach (var w in words)
+            {
+                int weight = 1 + w.Distinct().Sum(c => _mistakes.GetValueOrDefault(c));
+                for (int i = 0; i < Math.Min(weight, 5); i++) pool.Add(w);
+            }
+            CurrentWord = pool[_random.Next(pool.Count)];
+            return CurrentWord;
+        }
+
+        /// <summary>Prüft ein getipptes Wort. Groß/klein ist egal.</summary>
+        public bool CheckWord(string answer) => ScoreWord(answer.Trim().ToUpperInvariant());
+
+        /// <summary>Prüft eine Liste gemorster Buchstaben-Codes gegen das aktuelle Wort.</summary>
+        public bool CheckWordCodes(IEnumerable<string> codes) =>
+            ScoreWord(string.Concat(codes.Select(c => MorseTable.Reverse.TryGetValue(c, out char ch) ? ch : '?')));
+
+        private bool ScoreWord(string answer)
+        {
+            bool ok = answer == CurrentWord;
+            if (ok)
+            {
+                Correct++;
+                Streak++;
+                BestStreak = Math.Max(BestStreak, Streak);
+            }
+            else
+            {
+                Wrong++;
+                Streak = 0;
+                // Fehler bei den Buchstaben merken, die an der falschen Stelle standen
+                for (int i = 0; i < CurrentWord.Length; i++)
+                    if (i >= answer.Length || answer[i] != CurrentWord[i])
+                        _mistakes[CurrentWord[i]] = _mistakes.GetValueOrDefault(CurrentWord[i]) + 1;
+            }
+            return ok;
         }
 
         /// <summary>Prüft einen eingegebenen Morsecode gegen das aktuelle Zeichen.</summary>

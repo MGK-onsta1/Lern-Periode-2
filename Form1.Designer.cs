@@ -39,6 +39,11 @@
             lblFreq = new Label();
             numFreq = new NumericUpDown();
             lblUnit = new Label();
+            lblVolume = new Label();
+            trackVolume = new TrackBar();
+            lblGap = new Label();
+            numGap = new NumericUpDown();
+            btnTestTone = new Button();
             tabMain = new TabControl();
             tabTranslate = new TabPage();
             lblInput = new Label();
@@ -91,6 +96,8 @@
             panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numWpm).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numFreq).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackVolume).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numGap).BeginInit();
             tabMain.SuspendLayout();
             tabTranslate.SuspendLayout();
             tabKey.SuspendLayout();
@@ -106,10 +113,15 @@
             panelTop.Controls.Add(lblFreq);
             panelTop.Controls.Add(numFreq);
             panelTop.Controls.Add(lblUnit);
+            panelTop.Controls.Add(lblVolume);
+            panelTop.Controls.Add(trackVolume);
+            panelTop.Controls.Add(lblGap);
+            panelTop.Controls.Add(numGap);
+            panelTop.Controls.Add(btnTestTone);
             panelTop.Dock = DockStyle.Top;
             panelTop.Location = new Point(0, 0);
             panelTop.Name = "panelTop";
-            panelTop.Size = new Size(820, 44);
+            panelTop.Size = new Size(900, 72);
             panelTop.TabIndex = 0;
             //
             // lblWpm
@@ -155,10 +167,62 @@
             //
             lblUnit.AutoSize = true;
             lblUnit.ForeColor = SystemColors.GrayText;
-            lblUnit.Location = new Point(410, 14);
+            lblUnit.Location = new Point(12, 46);
             lblUnit.Name = "lblUnit";
             lblUnit.Size = new Size(200, 20);
             lblUnit.Text = "Punkt = 100 ms";
+            //
+            // lblVolume
+            //
+            lblVolume.AutoSize = true;
+            lblVolume.Location = new Point(410, 14);
+            lblVolume.Name = "lblVolume";
+            lblVolume.Size = new Size(82, 20);
+            lblVolume.Text = "Lautstärke:";
+            //
+            // trackVolume
+            //
+            trackVolume.AutoSize = false;
+            trackVolume.Location = new Point(490, 8);
+            trackVolume.Maximum = 100;
+            trackVolume.Name = "trackVolume";
+            trackVolume.Size = new Size(130, 30);
+            trackVolume.TabIndex = 3;
+            trackVolume.TickStyle = TickStyle.None;
+            trackVolume.Value = 50;
+            trackVolume.ValueChanged += settings_Changed;
+            //
+            // lblGap
+            //
+            lblGap.AutoSize = true;
+            lblGap.Location = new Point(632, 14);
+            lblGap.Name = "lblGap";
+            lblGap.Size = new Size(72, 20);
+            lblGap.Text = "Pausen ×";
+            //
+            // numGap
+            //
+            numGap.DecimalPlaces = 1;
+            numGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+            numGap.Location = new Point(706, 10);
+            numGap.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            numGap.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numGap.Name = "numGap";
+            numGap.Size = new Size(64, 27);
+            numGap.TabIndex = 4;
+            numGap.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numGap.ValueChanged += settings_Changed;
+            //
+            // btnTestTone
+            //
+            btnTestTone.Location = new Point(784, 8);
+            btnTestTone.Name = "btnTestTone";
+            btnTestTone.Size = new Size(104, 32);
+            btnTestTone.TabIndex = 5;
+            btnTestTone.TabStop = false;
+            btnTestTone.Text = "🔊 Test";
+            btnTestTone.UseVisualStyleBackColor = true;
+            btnTestTone.Click += btnTestTone_Click;
             //
             // tabMain
             //
@@ -166,7 +230,7 @@
             tabMain.Controls.Add(tabKey);
             tabMain.Controls.Add(tabLearn);
             tabMain.Dock = DockStyle.Fill;
-            tabMain.Location = new Point(0, 44);
+            tabMain.Location = new Point(0, 72);
             tabMain.Name = "tabMain";
             tabMain.SelectedIndex = 0;
             tabMain.Size = new Size(820, 534);
@@ -687,12 +751,12 @@
             //
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(820, 604);
+            ClientSize = new Size(900, 680);
             Controls.Add(tabMain);
             Controls.Add(panelTop);
             Controls.Add(statusStrip);
             KeyPreview = true;
-            MinimumSize = new Size(700, 560);
+            MinimumSize = new Size(900, 640);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Morse-Übersetzer";
@@ -704,6 +768,8 @@
             panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numWpm).EndInit();
             ((System.ComponentModel.ISupportInitialize)numFreq).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackVolume).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numGap).EndInit();
             tabMain.ResumeLayout(false);
             tabTranslate.ResumeLayout(false);
             tabTranslate.PerformLayout();
@@ -726,6 +792,11 @@
         private Label lblFreq;
         private NumericUpDown numFreq;
         private Label lblUnit;
+        private Label lblVolume;
+        private TrackBar trackVolume;
+        private Label lblGap;
+        private NumericUpDown numGap;
+        private Button btnTestTone;
         private TabControl tabMain;
         private TabPage tabTranslate;
         private Label lblInput;

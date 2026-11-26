@@ -13,15 +13,25 @@ namespace Morse
     public sealed class MorseAudio : IDisposable
     {
         private const int SampleRate = 22050;
-        private const double Volume = 0.5;
         private const int RampMs = 5; // weiches Ein-/Ausblenden gegen Knackgeräusche
 
         private readonly WaveOut _out = new(SampleRate);
         private short[]? _loopTone;
-        private int _loopToneFreq;
+        private int _loopToneFreq, _loopToneVol;
 
         /// <summary>Tonhöhe in Hertz.</summary>
         public int Frequency { get; set; } = 600;
+
+        /// <summary>Lautstärke in Prozent (0–100).</summary>
+        public int Volume { get; set; } = 50;
+
+        /// <summary>
+        /// Pausen-Faktor zum Lernen (Farnsworth-Methode): Die Zeichen bleiben schnell,
+        /// aber die Pausen zwischen Buchstaben und Wörtern werden länger. 1 = normal.
+        /// </summary>
+        public double GapFactor { get; set; } = 1.0;
+
+        private double Amplitude => Math.Clamp(Volume, 0, 100) / 100.0 * 0.9;
 
         /// <summary>Tempo in Wörtern pro Minute.</summary>
         public int Wpm { get; set; } = 12;
@@ -38,10 +48,11 @@ namespace Morse
         /// <summary>Startet einen Dauerton (für die Leertasten-Eingabe).</summary>
         public void StartTone()
         {
-            if (_loopTone == null || _loopToneFreq != Frequency)
+            if (_loopTone == null || _loopToneFreq != Frequency || _loopToneVol != Volume)
             {
                 _loopTone = BuildLoopTone();
                 _loopToneFreq = Frequency;
+                _loopToneVol = Volume;
             }
             _out.Play(_loopTone, loop: true);
         }
@@ -52,7 +63,7 @@ namespace Morse
         /// <summary>Berechnet die Dauer eines Morse-Strings in Millisekunden.</summary>
         public double DurationMs(string morse)
         {
-            int units = 0;
+            double units = 0;
             foreach (var (_, u) in Elements(MorseTable.Normalize(morse)))
                 units += u;
             return units * UnitMs;
@@ -61,10 +72,11 @@ namespace Morse
         // ---------------------------------------------------------------- Töne berechnen
 
         /// <summary>Zerlegt den Morse-String in (Ton?, Einheiten)-Abschnitte.</summary>
-        private static IEnumerable<(bool isTone, int units)> Elements(string morse)
+        private IEnumerable<(bool isTone, double units)> Elements(string morse)
         {
+            double gap = Math.Max(1.0, GapFactor);
             bool first = true;
-            int pendingGap = 1;
+            double pendingGap = 1;
             foreach (char c in morse)
             {
                 switch (c)
@@ -77,10 +89,10 @@ namespace Morse
                         pendingGap = 1;
                         break;
                     case ' ':
-                        pendingGap = Math.Max(pendingGap, 3);
+                        pendingGap = Math.Max(pendingGap, 3 * gap);
                         break;
                     case '/':
-                        pendingGap = 7;
+                        pendingGap = 7 * gap;
                         break;
                 }
             }
@@ -96,7 +108,7 @@ namespace Morse
 
             foreach (var (isTone, units) in Elements(morse))
             {
-                int n = samplesPerUnit * units;
+                int n = (int)(samplesPerUnit * units);
                 if (isTone) AppendTone(samples, n);
                 else samples.AddRange(new short[n]);
             }
@@ -113,7 +125,7 @@ namespace Morse
                 if (i < ramp) env = (double)i / ramp;
                 else if (i > count - ramp) env = (double)(count - i) / ramp;
 
-                double v = Math.Sin(2 * Math.PI * Frequency * i / SampleRate) * Volume * env;
+                double v = Math.Sin(2 * Math.PI * Frequency * i / SampleRate) * Amplitude * env;
                 samples.Add((short)(v * short.MaxValue));
             }
         }
@@ -128,7 +140,7 @@ namespace Morse
             int cycles = Math.Max(1, (int)Math.Round(Frequency * 0.5));
             var s = new short[length];
             for (int i = 0; i < length; i++)
-                s[i] = (short)(Math.Sin(2 * Math.PI * cycles * i / length) * Volume * short.MaxValue);
+                s[i] = (short)(Math.Sin(2 * Math.PI * cycles * i / length) * Amplitude * short.MaxValue);
             return s;
         }
 

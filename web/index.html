@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#0b0805">
+<title>MorseCode</title>
+<style>
+  /* Pixel-Schrift kommt vom Programm (/pixel.ttf) – „Press Start 2P“, SIL Open Font License */
+  @font-face { font-family: "Pixel"; src: url("/pixel.ttf") format("truetype"); font-display: swap; }
+
+  /* Farben werden per JavaScript aus dem gewählten Schema gesetzt (gleiche Rechnung wie im Programm) */
+  :root {
+    --page: #16100b; --card: #271c15; --text: #fff2e6; --muted: #b38463; --line: #563520;
+    --accent: #ff7a1c; --accent-dark: #ff9549; --accent-soft: #4b2b17; --on-accent: #1a0d05;
+    --nav: #0b0805; --nav-hover: #2e1f13; --nav-text: #cba585;
+    --ok: #6edc8c; --ok-soft: #3a4429; --bad: #ff6b5b; --bad-soft: #4e2a20; --warn: #ffc24a; --warn-soft: #4f3a1f;
+    --shadow: #000;
+    --px: "Pixel", "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    color: var(--text); font: 16px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+    background-color: var(--page);
+    /* feines Pixel-Punktraster */
+    background-image: radial-gradient(color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1.2px);
+    background-size: 8px 8px;
+  }
+  button, input, textarea { font: inherit; color: inherit; }
+  .hidden { display: none !important; }
+  .mono { font-family: Consolas, "SF Mono", Menlo, monospace; }
+  .px { font-family: var(--px); text-transform: uppercase; letter-spacing: 1px; -webkit-font-smoothing: none; }
+
+  /* ---------- Pixel-Bausteine ---------- */
+  .card { background: var(--card); border: 3px solid var(--line); box-shadow: 5px 5px 0 var(--shadow); }
+  .stripes { display: inline-block; width: 74px; height: 10px; background: repeating-linear-gradient(-60deg, var(--accent) 0 4px, transparent 4px 8px); }
+  .btn {
+    border: 3px solid var(--line); background: var(--card); padding: 10px 14px; cursor: pointer;
+    font-family: var(--px); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;
+    box-shadow: 3px 3px 0 var(--shadow); transition: transform .05s, box-shadow .05s, background .1s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn:active { transform: translate(3px, 3px); box-shadow: none; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .btn.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: var(--on-accent); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  input[type=text], input[type=password], input[type=number], textarea {
+    width: 100%; padding: 11px 12px; border: 3px solid var(--line); border-radius: 0; background: var(--page); outline: none;
+  }
+  input:focus, textarea:focus { border-color: var(--accent); }
+  label { display: block; font-family: var(--px); font-size: 9px; color: var(--muted); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .logo-art { image-rendering: pixelated; display: block; }
+
+  /* ---------- Beitreten ---------- */
+  #join { min-height: 100%; display: grid; place-items: center; padding: 24px 16px; }
+  #join .card { width: 100%; max-width: 410px; padding: 0; }
+  .join-head { background: var(--accent); color: var(--on-accent); padding: 12px 16px 16px; border-bottom: 3px solid var(--line); }
+  .join-head .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .join-head .lvl { font-family: var(--px); font-size: 9px; }
+  .join-head .stripes { background: repeating-linear-gradient(-60deg, var(--on-accent) 0 4px, transparent 4px 8px); }
+  .join-art { display: grid; place-items: center; padding: 18px 0 6px; background: color-mix(in srgb, var(--on-accent) 12%, transparent); }
+  .join-head h1 { font-family: var(--px); font-size: 22px; margin: 14px 0 0; letter-spacing: 1px; }
+  .join-body { padding: 8px 22px 22px; }
+  .join-body p { color: var(--muted); margin: 14px 0 4px; font-size: 15px; }
+  #joinBtn { width: 100%; margin-top: 22px; padding: 14px; font-size: 12px; }
+  #joinStatus { margin-top: 14px; min-height: 1.4em; color: var(--bad); text-align: center; }
+  .lock { margin-top: 14px; font-size: 13px; color: var(--muted); text-align: center; }
+
+  /* ---------- Farbwahl ---------- */
+  .colors { position: relative; }
+  .colorBtn { display: flex; align-items: center; gap: 8px; background: transparent; color: var(--accent); border-color: var(--accent); box-shadow: none; padding: 8px 10px; font-size: 9px; }
+  .swatch { display: inline-block; width: 12px; height: 12px; background: var(--accent); box-shadow: 0 0 0 2px var(--page); }
+  .colorMenu {
+    position: absolute; right: 0; top: calc(100% + 8px); z-index: 10; width: 230px; padding: 8px;
+    background: var(--card); border: 3px solid var(--accent); box-shadow: 5px 5px 0 var(--shadow);
+  }
+  .colorMenu button {
+    display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 8px; background: transparent; border: 0;
+    cursor: pointer; text-align: left; font-size: 14px; color: var(--text);
+  }
+  .colorMenu button:hover, .colorMenu button.on { background: var(--accent-soft); }
+  .colorMenu button.on::after { content: "✔"; margin-left: auto; color: var(--accent); }
+  .colorMenu .chip { width: 22px; height: 22px; border: 3px solid; flex: none; }
+  .colorMenu .custom { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-top: 2px solid var(--line); margin-top: 4px; font-size: 14px; }
+  .colorMenu input[type=color] { width: 34px; height: 26px; padding: 0; border: 2px solid var(--line); background: none; cursor: pointer; }
+  #join .colors { position: fixed; top: 14px; right: 14px; }
+
+  /* ---------- App ---------- */
+  #app { display: flex; flex-direction: column; height: 100%; }
+  nav {
+    display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: var(--nav); color: var(--text);
+    border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 5;
+  }
+  nav .brand { display: flex; align-items: center; gap: 10px; margin-right: 10px; white-space: nowrap; font-family: var(--px); font-size: 13px; color: var(--accent); }
+  nav .tab {
+    background: transparent; border: 0; color: var(--nav-text); padding: 10px 12px; cursor: pointer;
+    font-family: var(--px); font-size: 9px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+  }
+  nav .tab:hover { background: var(--nav-hover); }
+  nav .tab.on { background: var(--accent); color: var(--on-accent); }
+  nav .who { margin-left: auto; display: flex; align-items: center; gap: 8px; color: var(--nav-text); font-size: 14px; min-width: 0; }
+  nav .who span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #dot { width: 10px; height: 10px; background: var(--ok); flex: none; animation: pulse 1.6s steps(2) infinite; }
+  #dot.off { background: var(--bad); animation: none; }
+  @keyframes pulse { 50% { opacity: .35; } }
+  main { flex: 1; min-height: 0; width: 100%; max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; }
+
+  /* Chat */
+  #chatView { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  #log { flex: 1; overflow-y: auto; padding: 18px 16px; scroll-behavior: smooth; }
+  .msg { max-width: 82%; margin: 0 0 14px; display: flex; flex-direction: column; }
+  .msg .who { font-size: 12px; color: var(--muted); margin: 0 2px 5px; }
+  .msg .who b { color: var(--accent); font-family: var(--px); font-size: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: normal; }
+  .bubble { background: var(--card); border: 3px solid var(--line); padding: 9px 13px; box-shadow: 4px 4px 0 var(--shadow); }
+  .msg.mine { margin-left: auto; align-items: flex-end; }
+  .msg.mine .bubble { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .msg.mine .code { color: var(--on-accent); opacity: .7; }
+  .txt { font-weight: 700; font-size: 17px; word-break: break-word; }
+  .code { font-size: 13px; color: var(--muted); word-break: break-word; margin-top: 3px; }
+  .sys { text-align: center; margin: 6px 0 14px; }
+  .sys span { display: inline-block; border: 2px dashed var(--warn); color: var(--warn); font-size: 13px; padding: 4px 12px; }
+
+  #composer { margin: 0 14px 16px; padding: 14px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .seg { display: inline-flex; border: 3px solid var(--line); background: var(--page); flex-wrap: wrap; }
+  .seg button {
+    border: 0; background: transparent; padding: 9px 11px; cursor: pointer; color: var(--muted);
+    font-family: var(--px); font-size: 8px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .seg button.on { background: var(--accent); color: var(--on-accent); }
+  #cur { color: var(--muted); font-size: 13px; margin-left: auto; }
+  #input { margin-top: 12px; font-size: 18px; }
+  #input.morse { letter-spacing: 1px; }
+  #input[readonly] { background: var(--accent-soft); }
+  #preview { min-height: 1.6em; margin: 8px 2px 2px; color: var(--accent); font-weight: 700; word-break: break-word; }
+  #key {
+    width: 100%; height: 96px; margin: 8px 0 10px; border: 4px solid var(--accent); background: var(--accent-soft); color: var(--accent);
+    font-family: var(--px); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.8; cursor: pointer;
+    box-shadow: 5px 5px 0 var(--shadow);
+    user-select: none; -webkit-user-select: none; touch-action: none; -webkit-touch-callout: none;
+  }
+  #key small { font-size: 8px; opacity: .8; }
+  #key.down { background: var(--accent); color: var(--on-accent); transform: translate(5px, 5px); box-shadow: 0 0 22px var(--accent); }
+  .actions { display: flex; gap: 10px; margin-top: 10px; }
+  .actions .btn { flex: 1; }
+  .actions .btn.primary { flex: 1.4; }
+  details { margin-top: 12px; font-size: 14px; color: var(--muted); }
+  details summary { cursor: pointer; user-select: none; font-family: var(--px); font-size: 9px; text-transform: uppercase; letter-spacing: 1px; }
+  .settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 4px 14px; margin-top: 6px; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--text); }
+  .check input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+  /* Übersetzer */
+  #trView { padding: 18px 16px; overflow-y: auto; }
+  #trView h2 { margin: 6px 0 8px; font-family: var(--px); font-size: 16px; color: var(--accent); font-weight: normal; }
+  #trView .hint { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+  .tr { padding: 14px; margin-bottom: 18px; }
+  .tr .head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .tr .head b { margin-right: auto; font-family: var(--px); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: normal; color: var(--accent); }
+  .tr textarea { min-height: 110px; resize: vertical; border: 0; padding: 4px; background: transparent; font-size: 18px; }
+  #trMorse { color: var(--accent); letter-spacing: 1px; }
+  .small { padding: 8px 10px; font-size: 8px; }
+  .table { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 6px; }
+  .table button { border: 2px solid var(--line); background: var(--page); padding: 6px 8px; cursor: pointer; text-align: left; font-size: 14px; color: var(--muted); }
+  .table button:hover { border-color: var(--accent); color: var(--accent); }
+  .table b { display: inline-block; width: 1.3em; color: var(--text); font-size: 15px; }
+
+  @media (max-width: 600px) {
+    nav .brand span { display: none; }
+    nav .who span:last-child { display: none; }
+    nav .tab { padding: 10px 8px; }
+    .colorBtn .lbl { display: none; }
+    .msg { max-width: 92%; }
+    #composer { margin: 0 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= Beitreten ================= -->
+<section id="join">
+  <div class="colors" data-colors></div>
+  <div class="card">
+    <div class="join-head">
+      <div class="top"><span class="stripes"></span><span class="lvl">DIT · DAH</span></div>
+      <div class="join-art"><canvas class="logo-art" data-logo="9"></canvas></div>
+      <h1>MorseCode</h1>
+    </div>
+    <div class="join-body">
+      <p>Morse mit deinen Freunden – direkt im Browser, ohne Installation.</p>
+      <label for="name">Dein Name</label>
+      <input id="name" type="text" maxlength="30" autocomplete="nickname" placeholder="z. B. Ben">
+      <label for="pw">Passwort</label>
+      <input id="pw" type="password" autocomplete="off" placeholder="frag deinen Freund">
+      <button id="joinBtn" class="btn primary">Beitreten ▶</button>
+      <div id="joinStatus"></div>
+      <div class="lock">🔒 Nachrichten werden mit eurem Passwort verschlüsselt.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= App ================= -->
+<section id="app" class="hidden">
+  <nav>
+    <span class="brand"><canvas class="logo-art" data-logo="2"></canvas><span>MorseCode</span></span>
+    <button class="tab on" data-view="chatView">Chat</button>
+    <button class="tab" data-view="trView">Übersetzer</button>
+    <span class="who"><span id="dot"></span><span id="online"></span></span>
+    <div class="colors" data-colors></div>
+  </nav>
+  <main>
+    <!-- Chat -->
+    <section id="chatView">
+      <div id="log"></div>
+      <div id="composer" class="card">
+        <div class="row">
+          <div class="seg">
+            <button data-mode="morse" class="on">Morse . -</button>
+            <button data-mode="text">Text → Morse</button>
+            <button data-mode="key">Morsetaste</button>
+          </div>
+          <span id="cur"></span>
+        </div>
+        <input id="input" class="mono morse" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+               placeholder=".... .- .-.. .-.. --- / .-- . .-.. -">
+        <div id="preview"></div>
+        <button id="key" class="hidden">Taste – drücken &amp; halten<br><small>am PC auch Leertaste</small></button>
+        <div class="actions">
+          <button id="undo" class="btn">⌫</button>
+          <button id="clear" class="btn">Leeren</button>
+          <button id="send" class="btn primary">Senden ▶</button>
+        </div>
+        <details>
+          <summary>Einstellungen</summary>
+          <div class="settings">
+            <div><label for="dotMax">Punkt bis (ms)</label><input id="dotMax" type="number" min="100" max="1000" step="25" value="300"></div>
+            <div><label for="wpm">Tempo (WPM)</label><input id="wpm" type="number" min="5" max="40" value="12"></div>
+            <div>
+              <span class="check"><input id="sound" type="checkbox" checked><span>Ton an</span></span>
+              <span class="check"><input id="playIn" type="checkbox" checked><span>Empfangenes abspielen</span></span>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Übersetzer -->
+    <section id="trView" class="hidden">
+      <h2>Übersetzer</h2>
+      <p class="hint">Tippe oben Text oder unten Morsecode – die andere Seite übersetzt sich sofort.</p>
+      <div class="card tr">
+        <div class="head"><b>Text</b><button id="trToChat" class="btn small">In den Chat</button></div>
+        <textarea id="trText" placeholder="Hallo Welt"></textarea>
+      </div>
+      <div class="card tr">
+        <div class="head">
+          <b>Morsecode</b>
+          <button id="trPlay" class="btn primary small">▶ Abspielen</button>
+          <button id="trCopy" class="btn small">Kopieren</button>
+          <button id="trClear" class="btn small">Leeren</button>
+        </div>
+        <textarea id="trMorse" class="mono" placeholder=".... .- .-.. .-.. --- / .-- . .-.. -"></textarea>
+      </div>
+      <div class="card tr">
+        <div class="head"><b>Morse-Tabelle</b><span class="hint" style="margin:0">antippen zum Anhören</span></div>
+        <div id="table" class="table mono"></div>
+      </div>
+    </section>
+  </main>
+</section>
+
+<script>
+"use strict";
+const CODES = __MORSE_CODES__;
+const REVERSE = Object.fromEntries(Object.entries(CODES).map(([c, m]) => [m, c]));
+const $ = id => document.getElementById(id);
+
+// ================= Farbschemas (gleiche Rechnung wie Theme.cs im Programm) =================
+const APP_THEME = __THEME__;
+const PALETTES = [
+  { name: "Orange", accent: "#ff7a1c" },
+  { name: "Neon-Grün", accent: "#39ff88" },
+  { name: "Cyber-Blau", accent: "#3db8ff" },
+  { name: "Pixel-Lila", accent: "#b36bff" },
+  { name: "Retro-Rot", accent: "#ff4d5e" },
+  { name: "Gameboy", accent: "#9bbc0f" },
+  { name: "Hell (klassisch)", accent: "#2f6fb2", light: true },
+];
+const LIGHT = {
+  page: "#f3f5f9", card: "#ffffff", text: "#1d2330", muted: "#6b7385", line: "#dde2ea",
+  accent: "#2f6fb2", "accent-dark": "#245890", "accent-soft": "#e3edf8", "on-accent": "#ffffff",
+  nav: "#17202d", "nav-hover": "#263448", "nav-text": "#b9c4d4",
+  ok: "#2e8b57", "ok-soft": "#d6f5e0", bad: "#c0392b", "bad-soft": "#ffdcd8", warn: "#c27c0e", "warn-soft": "#fff3c8", shadow: "#dde2ea",
+};
+const hexToRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const rgbToHex = c => "#" + c.map(v => Math.round(v).toString(16).padStart(2, "0")).join("");
+const blend = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+function darkPalette(accentHex) {
+  const acc = hexToRgb(accentHex), white = [255, 255, 255], black = [0, 0, 0];
+  const mix = (gray, t) => blend([gray, gray, gray], acc, t);
+  const card = mix(20, .08), ok = [110, 220, 140], bad = [255, 107, 91], warn = [255, 194, 74];
+  const bright = (0.299 * acc[0] + 0.587 * acc[1] + 0.114 * acc[2]) / 255 > 0.45;
+  const p = {
+    page: mix(10, .05), card, text: mix(255, .10), muted: mix(138, .35), line: mix(30, .25),
+    accent: acc, "accent-dark": blend(acc, white, .2), "accent-soft": blend(card, acc, .18),
+    "on-accent": bright ? blend(black, acc, .1) : white,
+    nav: mix(5, .03), "nav-hover": mix(20, .15), "nav-text": mix(187, .3),
+    ok, "ok-soft": blend(card, ok, .2), bad, "bad-soft": blend(card, bad, .2), warn, "warn-soft": blend(card, warn, .18), shadow: black,
+  };
+  return Object.fromEntries(Object.entries(p).map(([k, v]) => [k, rgbToHex(v)]));
+}
+let theme = APP_THEME && APP_THEME.accent ? APP_THEME : { name: "Orange", accent: "#ff7a1c", dark: true };
+try { const saved = JSON.parse(localStorage.getItem("morse.theme") || "null"); if (saved && saved.accent) theme = saved; } catch {}
+
+function applyTheme(t, save) {
+  theme = t;
+  const light = t.dark === false || t.light;
+  const vars = light ? LIGHT : darkPalette(t.accent);
+  for (const [k, v] of Object.entries(vars)) document.documentElement.style.setProperty("--" + k, v);
+  document.querySelector('meta[name="theme-color"]').content = vars.nav;
+  if (save) try { localStorage.setItem("morse.theme", JSON.stringify(t)); } catch {}
+  drawLogos();
+  document.querySelectorAll("[data-colors]").forEach(buildColorMenu);
+}
+
+function buildColorMenu(host) {
+  host.innerHTML = "";
+  const btn = document.createElement("button");
+  btn.className = "btn colorBtn"; btn.type = "button";
+  btn.innerHTML = '<span class="swatch"></span><span class="lbl">Farben</span>';
+  const menu = document.createElement("div");
+  menu.className = "colorMenu hidden";
+  for (const p of PALETTES) {
+    const b = document.createElement("button"); b.type = "button";
+    const chip = document.createElement("span"); chip.className = "chip";
+    const pal = p.light ? LIGHT : darkPalette(p.accent);
+    chip.style.background = pal.page; chip.style.borderColor = pal.accent;
+    b.append(chip, p.name);
+    if (p.name === theme.name) b.classList.add("on");
+    b.onclick = () => applyTheme({ name: p.name, accent: p.accent, dark: !p.light }, true);
+    menu.append(b);
+  }
+  const custom = document.createElement("div"); custom.className = "custom";
+  const pick = document.createElement("input"); pick.type = "color"; pick.value = theme.accent;
+  pick.onchange = () => applyTheme({ name: "Eigene Farbe", accent: pick.value, dark: true }, true);
+  custom.append(pick, "Eigene Farbe");
+  menu.append(custom);
+  btn.onclick = e => { e.stopPropagation(); menu.classList.toggle("hidden"); };
+  menu.onclick = e => e.stopPropagation();
+  host.append(btn, menu);
+}
+document.addEventListener("click", () => document.querySelectorAll(".colorMenu").forEach(m => m.classList.add("hidden")));
+
+// Pixel-Logo (Morsetaste) – dieselbe Grafik wie im Programm
+const LOGO = [
+  "......aa........",
+  ".....aAAa.......",
+  ".....AAAA.......",
+  "......AA........",
+  "......TT........",
+  "..TTTTTTTTTTTT..",
+  "..T....TT....T..",
+  "..M....TT...AA..",
+  ".MMMMMMMMMMMMMM.",
+  ".MLLLLLLLLLLLLM.",
+  ".MMMMMMMMMMMMMM.",
+];
+function drawLogos() {
+  const css = getComputedStyle(document.documentElement);
+  const color = { A: "--accent", a: "--accent-dark", T: "--text", M: "--muted", L: "--line" };
+  document.querySelectorAll("canvas[data-logo]").forEach(cv => {
+    const s = +cv.dataset.logo;
+    cv.width = 16 * s; cv.height = LOGO.length * s;
+    const g = cv.getContext("2d");
+    g.clearRect(0, 0, cv.width, cv.height);
+    LOGO.forEach((row, y) => [...row].forEach((ch, x) => {
+      if (!color[ch]) return;
+      g.fillStyle = css.getPropertyValue(color[ch]).trim();
+      g.fillRect(x * s, y * s, s, s);
+    }));
+  });
+}
+applyTheme(theme, false);
+
+// ================= Morse =================
+function normalize(s) {
+  s = s.replace(/[·•*]/g, ".").replace(/[_–—−]/g, "-").replace(/[\t\r\n]/g, " ").replace(/\|/g, "/");
+  return s.replace(/ {3,}/g, " / ");
+}
+function decode(morse) {
+  return normalize(morse).split("/")
+    .map(w => w.trim().split(/ +/).filter(Boolean).map(c => REVERSE[c] ?? "?").join(""))
+    .filter(Boolean).join(" ");
+}
+function encode(text) {
+  return text.toUpperCase().replace(/ß/g, "SS").split(/\s+/).filter(Boolean)
+    .map(w => [...w].filter(c => CODES[c]).map(c => CODES[c]).join(" "))
+    .filter(Boolean).join(" / ");
+}
+function cleanMorse(s) {
+  const t = normalize(s).split(" ").filter(Boolean);
+  while (t.length && t[t.length - 1] === "/") t.pop();
+  return t.join(" ");
+}
+
+// ================= Krypto (muss exakt zu WebBridge.cs passen) =================
+const K = new Uint32Array([
+  0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+  0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+  0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+  0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+  0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+  0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+  0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+  0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+const W = new Uint32Array(64);
+
+function sha256(data) {
+  const len = data.length, n = ((len + 9 + 63) >> 6) << 6;
+  const buf = new Uint8Array(n); buf.set(data); buf[len] = 0x80;
+  const dv = new DataView(buf.buffer);
+  dv.setUint32(n - 4, (len * 8) >>> 0); dv.setUint32(n - 8, Math.floor(len / 0x20000000));
+  let h0 = 0x6a09e667, h1 = 0xbb67ae85, h2 = 0x3c6ef372, h3 = 0xa54ff53a,
+      h4 = 0x510e527f, h5 = 0x9b05688c, h6 = 0x1f83d9ab, h7 = 0x5be0cd19;
+  for (let off = 0; off < n; off += 64) {
+    for (let i = 0; i < 16; i++) W[i] = dv.getUint32(off + i * 4);
+    for (let i = 16; i < 64; i++) {
+      const a = W[i - 15], b = W[i - 2];
+      const s0 = ((a >>> 7) | (a << 25)) ^ ((a >>> 18) | (a << 14)) ^ (a >>> 3);
+      const s1 = ((b >>> 17) | (b << 15)) ^ ((b >>> 19) | (b << 13)) ^ (b >>> 10);
+      W[i] = (W[i - 16] + s0 + W[i - 7] + s1) | 0;
+    }
+    let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
+    for (let i = 0; i < 64; i++) {
+      const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+      const t1 = (h + S1 + ((e & f) ^ (~e & g)) + K[i] + W[i]) | 0;
+      const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+      const t2 = (S0 + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+    }
+    h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0; h3 = (h3 + d) | 0;
+    h4 = (h4 + e) | 0; h5 = (h5 + f) | 0; h6 = (h6 + g) | 0; h7 = (h7 + h) | 0;
+  }
+  const out = new Uint8Array(32), ov = new DataView(out.buffer);
+  [h0, h1, h2, h3, h4, h5, h6, h7].forEach((v, i) => ov.setUint32(i * 4, v >>> 0));
+  return out;
+}
+function concat(...parts) {
+  const out = new Uint8Array(parts.reduce((s, p) => s + p.length, 0));
+  let o = 0; for (const p of parts) { out.set(p, o); o += p.length; }
+  return out;
+}
+function hmac(key, msg) {
+  if (key.length > 64) key = sha256(key);
+  const ipad = new Uint8Array(64 + msg.length), opad = new Uint8Array(96);
+  for (let i = 0; i < 64; i++) { const k = key[i] || 0; ipad[i] = k ^ 0x36; opad[i] = k ^ 0x5c; }
+  ipad.set(msg, 64); opad.set(sha256(ipad), 64);
+  return sha256(opad);
+}
+function pbkdf2(password, salt, iterations, length) {
+  const out = new Uint8Array(length);
+  for (let block = 1, pos = 0; pos < length; block++, pos += 32) {
+    const s = new Uint8Array(salt.length + 4); s.set(salt); new DataView(s.buffer).setUint32(salt.length, block);
+    let u = hmac(password, s); const t = u.slice();
+    for (let i = 1; i < iterations; i++) { u = hmac(password, u); for (let j = 0; j < 32; j++) t[j] ^= u[j]; }
+    out.set(t.subarray(0, Math.min(32, length - pos)), pos);
+  }
+  return out;
+}
+const enc = new TextEncoder(), dec = new TextDecoder();
+let encKey = null, macKey = null;
+
+function xorStream(nonce, data) {
+  const out = new Uint8Array(data.length), block = new Uint8Array(20);
+  block.set(nonce);
+  for (let off = 0, ctr = 0; off < data.length; off += 32, ctr++) {
+    new DataView(block.buffer).setUint32(16, ctr);
+    const ks = hmac(encKey, block);
+    for (let i = 0; i < 32 && off + i < data.length; i++) out[off + i] = data[off + i] ^ ks[i];
+  }
+  return out;
+}
+const toB64 = b => btoa(Array.from(b, x => String.fromCharCode(x)).join(""));
+const fromB64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+function encrypt(packet) {
+  const nonce = crypto.getRandomValues(new Uint8Array(16));
+  const cipher = xorStream(nonce, enc.encode(JSON.stringify(packet)));
+  return toB64(concat(nonce, cipher, hmac(macKey, concat(nonce, cipher))));
+}
+function decrypt(text) {
+  try {
+    const d = fromB64(text);
+    if (d.length < 48) return null;
+    const nonce = d.subarray(0, 16), cipher = d.subarray(16, d.length - 32), tag = d.subarray(d.length - 32);
+    const expected = hmac(macKey, concat(nonce, cipher));
+    let diff = 0; for (let i = 0; i < 32; i++) diff |= expected[i] ^ tag[i];
+    if (diff) return null;
+    return JSON.parse(dec.decode(xorStream(nonce, cipher)));
+  } catch { return null; }
+}
+
+// ================= Ton =================
+let actx = null, gain = null;
+function audio() {
+  if (!actx) {
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+    gain = actx.createGain(); gain.gain.value = 0; gain.connect(actx.destination);
+    const osc = actx.createOscillator(); osc.frequency.value = 600; osc.connect(gain); osc.start();
+  }
+  if (actx.state === "suspended") actx.resume();
+  return actx;
+}
+const soundOn = () => $("sound").checked;
+function toneOn() { if (!soundOn()) return; const a = audio(); gain.gain.cancelScheduledValues(a.currentTime); gain.gain.setTargetAtTime(0.3, a.currentTime, 0.004); }
+function toneOff() { if (!actx) return; gain.gain.cancelScheduledValues(actx.currentTime); gain.gain.setTargetAtTime(0, actx.currentTime, 0.004); }
+function play(morse) {
+  if (!soundOn()) return;
+  const a = audio(), unit = 1.2 / Math.max(5, +$("wpm").value || 12);
+  let t = a.currentTime + 0.05;
+  gain.gain.cancelScheduledValues(a.currentTime); gain.gain.setValueAtTime(0, a.currentTime);
+  const tone = n => { gain.gain.setTargetAtTime(0.3, t, 0.004); t += n * unit; gain.gain.setTargetAtTime(0, t, 0.004); };
+  normalize(morse).split("/").forEach((word, wi) => {
+    if (wi) t += 7 * unit;
+    word.trim().split(/ +/).filter(Boolean).forEach((letter, li) => {
+      if (li) t += 3 * unit;
+      [...letter].forEach((s, si) => { if (si) t += unit; if (s === ".") tone(1); else if (s === "-") tone(3); });
+    });
+  });
+}
+
+// ================= Verbindung =================
+let ws = null, myName = "", joined = false;
+let everJoined = false, rejected = false, lostShown = false;
+
+try { $("name").value = localStorage.getItem("morse.name") || ""; } catch {}
+$("joinBtn").onclick = join;
+$("pw").onkeydown = e => { if (e.key === "Enter") join(); };
+$("name").onkeydown = e => { if (e.key === "Enter") $("pw").focus(); };
+
+function join() {
+  myName = $("name").value.trim();
+  if (!myName) { $("joinStatus").textContent = "Bitte gib einen Namen ein."; return; }
+  try { localStorage.setItem("morse.name", myName); } catch {}
+  audio(); // Ton freischalten (Browser erlauben Ton erst nach einem Klick)
+  $("joinBtn").disabled = true;
+  rejected = false;
+  $("joinStatus").style.color = "var(--muted)";
+  $("joinStatus").textContent = "Schlüssel wird berechnet …";
+  setTimeout(() => {
+    const key = pbkdf2(enc.encode($("pw").value), enc.encode("MorseCode/web1"), 20000, 64);
+    encKey = key.slice(0, 32); macKey = key.slice(32);
+    connect();
+  }, 30);
+}
+
+function connect() {
+  if (!everJoined) $("joinStatus").textContent = "Verbinde …";
+  // über einen https-Link (z. B. Tunnel) muss die Verbindung wss:// sein
+  ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`);
+  ws.onopen = () => ws.send(encrypt({ T: "hello", N: myName, M: "" }));
+  ws.onmessage = onMessage;
+  ws.onclose = onClose;
+}
+function onMessage(ev) {
+  if (ev.data.startsWith("!")) { rejected = true; if (everJoined) sys(ev.data.slice(1)); else fail(ev.data.slice(1)); return; }
+  const p = decrypt(ev.data);
+  if (!p) return;
+  if (p.T === "welcome") {
+    joined = true; lostShown = false;
+    $("dot").classList.remove("off");
+    $("online").textContent = p.M ? "mit " + p.M : "";
+    if (!everJoined) {
+      everJoined = true;
+      $("join").classList.add("hidden"); $("app").classList.remove("hidden");
+      sys("Verbunden! Morse los – die anderen sehen deine Nachrichten sofort.");
+    } else sys("Wieder verbunden.");
+  } else if (p.T === "msg") {
+    addMsg(p.N, p.M, false);
+    if ($("playIn").checked) play(p.M);
+    if (document.hidden) document.title = "✉ " + p.N + " – MorseCode";
+  } else if (p.T === "sys") sys(p.M);
+  else if (p.T === "online") $("online").textContent = p.M ? "mit " + p.M : "";
+}
+function onClose() {
+  joined = false;
+  if (!everJoined) { if (!rejected) fail("Keine Verbindung. Ist dein Freund noch online?"); return; }
+  if (rejected) return;
+  $("dot").classList.add("off");
+  if (!lostShown) { lostShown = true; sys("Verbindung getrennt – ich versuche es weiter …"); }
+  setTimeout(connect, 3000);
+}
+function fail(text) {
+  $("joinBtn").disabled = false;
+  $("joinStatus").style.color = "var(--bad)";
+  $("joinStatus").textContent = text;
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) document.title = "MorseCode"; });
+
+// ================= Ansichten =================
+document.querySelectorAll("nav .tab").forEach(tab => tab.onclick = () => showView(tab.dataset.view));
+function showView(id) {
+  document.querySelectorAll("nav .tab").forEach(t => t.classList.toggle("on", t.dataset.view === id));
+  $("chatView").classList.toggle("hidden", id !== "chatView");
+  $("trView").classList.toggle("hidden", id !== "trView");
+  release();
+}
+
+// ================= Chat-Anzeige =================
+const time = () => new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+function addMsg(who, morse, mine) {
+  const div = document.createElement("div"); div.className = "msg" + (mine ? " mine" : "");
+  const w = document.createElement("div"); w.className = "who";
+  const b = document.createElement("b"); b.textContent = mine ? "Ich" : who;
+  w.append(b, " · " + time());
+  const bubble = document.createElement("div"); bubble.className = "bubble";
+  const t = document.createElement("div"); t.className = "txt"; t.textContent = decode(morse);
+  const c = document.createElement("div"); c.className = "code mono"; c.textContent = morse;
+  bubble.append(t, c);
+  div.append(w, bubble);
+  $("log").append(div); $("log").scrollTop = $("log").scrollHeight;
+}
+function sys(text) {
+  const div = document.createElement("div"); div.className = "sys";
+  const s = document.createElement("span"); s.textContent = time() + " · " + text;
+  div.append(s);
+  $("log").append(div); $("log").scrollTop = $("log").scrollHeight;
+}
+
+// ================= Eingabe =================
+// Modi: "morse" = Punkte/Striche tippen, "text" = normalen Text tippen (wird übersetzt), "key" = Morsetaste
+let mode = "morse";
+const input = $("input");
+function updatePreview() {
+  const v = input.value.trim();
+  $("preview").textContent = !v ? "" : mode === "text" ? "→ " + encode(v) : "→ " + decode(v);
+  $("preview").classList.toggle("mono", mode === "text");
+}
+input.addEventListener("input", updatePreview);
+input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); send(); } });
+
+function setMode(next) {
+  const wasText = mode === "text", isText = next === "text";
+  if (wasText !== isText && input.value.trim()) input.value = isText ? decode(input.value) : encode(input.value);
+  mode = next;
+  document.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", b.dataset.mode === next));
+  $("key").classList.toggle("hidden", next !== "key");
+  input.readOnly = next === "key";
+  input.classList.toggle("mono", !isText); input.classList.toggle("morse", !isText);
+  input.placeholder = isText ? "Hallo Welt – einfach normal schreiben" : ".... .- .-.. .-.. --- / .-- . .-.. -";
+  if (next === "key") input.blur(); else input.focus();
+  resetKey(); showCur(); updatePreview();
+}
+document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setMode(b.dataset.mode));
+
+function send() {
+  const morse = cleanMorse(mode === "text" ? encode(input.value) : input.value);
+  if (!morse || !joined) return;
+  ws.send(encrypt({ T: "msg", N: myName, M: morse }));
+  addMsg(myName, morse, true);
+  input.value = ""; updatePreview(); resetKey();
+}
+$("send").onclick = send;
+$("clear").onclick = () => { input.value = ""; updatePreview(); resetKey(); };
+$("undo").onclick = undo;
+function undo() {
+  if (mode === "text") { input.value = input.value.slice(0, -1); updatePreview(); return; }
+  const t = input.value.split(" ").filter(Boolean);
+  t.pop(); while (t.length && t[t.length - 1] === "/") t.pop();
+  input.value = t.join(" "); updatePreview();
+}
+
+// ---- Morsetaste: kurz = Punkt, lang = Strich ----
+let down = false, downAt = 0, upAt = 0, cur = "", wordDone = true, gapTimer = null, lastMs = 0;
+const dotMax = () => Math.max(100, +$("dotMax").value || 300);
+function press() {
+  if (down) return;
+  down = true; downAt = performance.now();
+  clearInterval(gapTimer); toneOn(); $("key").classList.add("down");
+}
+function release() {
+  if (!down) return;
+  down = false; upAt = performance.now();
+  toneOff(); $("key").classList.remove("down");
+  const ms = Math.round(upAt - downAt);
+  cur += ms <= dotMax() ? "." : "-";
+  wordDone = false; showCur(ms);
+  clearInterval(gapTimer); gapTimer = setInterval(checkGap, 15);
+}
+function checkGap() {
+  if (down) return;
+  const silence = performance.now() - upAt;
+  if (cur && silence >= dotMax() * 1.5) {
+    const t = input.value.trimEnd();
+    input.value = t ? t + " " + cur : cur;
+    cur = ""; updatePreview(); showCur();
+  }
+  if (!wordDone && silence >= dotMax() * 3.5) {
+    wordDone = true; clearInterval(gapTimer);
+    const t = input.value.trimEnd();
+    if (t && !t.endsWith("/")) input.value = t + " /";
+  }
+}
+function resetKey() { cur = ""; wordDone = true; clearInterval(gapTimer); }
+function showCur(ms) {
+  if (ms) lastMs = ms;
+  $("cur").textContent = mode === "key" ? `Buchstabe: ${cur || "–"}` + (lastMs ? ` · ${lastMs} ms` : "") : "";
+}
+
+const keyBtn = $("key");
+keyBtn.addEventListener("pointerdown", e => { e.preventDefault(); keyBtn.setPointerCapture(e.pointerId); press(); });
+keyBtn.addEventListener("pointerup", release);
+keyBtn.addEventListener("pointercancel", release);
+keyBtn.addEventListener("contextmenu", e => e.preventDefault());
+
+document.addEventListener("keydown", e => {
+  if (mode !== "key" || $("chatView").classList.contains("hidden") || $("app").classList.contains("hidden")) return;
+  const typing = (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) && !e.target.readOnly;
+  if (e.code === "Space" && !typing) { e.preventDefault(); if (!e.repeat) press(); }
+  else if (e.key === "Enter" && !typing) { e.preventDefault(); send(); }
+  else if (e.key === "Backspace" && !typing) { e.preventDefault(); undo(); }
+});
+document.addEventListener("keyup", e => { if (e.code === "Space" && down) { e.preventDefault(); release(); } });
+window.addEventListener("blur", release);
+
+// ================= Übersetzer =================
+let syncing = false;
+$("trText").addEventListener("input", () => { if (syncing) return; syncing = true; $("trMorse").value = encode($("trText").value); syncing = false; });
+$("trMorse").addEventListener("input", () => { if (syncing) return; syncing = true; $("trText").value = decode($("trMorse").value); syncing = false; });
+$("trPlay").onclick = () => play($("trMorse").value);
+$("trCopy").onclick = async () => {
+  const v = $("trMorse").value; if (!v) return;
+  try { await navigator.clipboard.writeText(v); } catch { $("trMorse").select(); document.execCommand("copy"); }
+  $("trCopy").textContent = "✔ Kopiert"; setTimeout(() => $("trCopy").textContent = "Kopieren", 1200);
+};
+$("trClear").onclick = () => { $("trText").value = ""; $("trMorse").value = ""; };
+$("trToChat").onclick = () => {
+  const text = $("trText").value.trim(); if (!text) return;
+  showView("chatView"); setMode("text"); input.value = text; updatePreview(); input.focus();
+};
+// Zahlen-Schlüssel stehen in JS-Objekten immer vorne – Buchstaben sollen aber zuerst kommen
+const entries = Object.entries(CODES);
+for (const [c, m] of [...entries.filter(([c]) => !/\d/.test(c)), ...entries.filter(([c]) => /\d/.test(c))]) {
+  const b = document.createElement("button");
+  const bc = document.createElement("b"); bc.textContent = c;
+  b.append(bc, " " + m);
+  b.onclick = () => play(m);
+  $("table").append(b);
+}
+</script>
+</body>
+</html>

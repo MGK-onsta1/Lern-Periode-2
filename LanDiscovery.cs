@@ -1,8 +1,8 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace MorseCode
+namespace Morse
 {
     /// <summary>
     /// Findet andere MorseCode-Programme im gleichen WLAN/Netzwerk per UDP-Broadcast.

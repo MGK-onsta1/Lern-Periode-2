@@ -1,7 +1,7 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace MorseCode
+namespace Morse
 {
     /// <summary>
     /// Erstellt einen öffentlichen Internet-Link (https://….trycloudflare.com) zum Browser-Zugang,
