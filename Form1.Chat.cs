@@ -341,6 +341,8 @@ namespace Morse
             SetOnlineUi(true);
             lblMyIp.Text = "Deine IP: " + (LocalAddresses().FirstOrDefault() ?? "–");
             SystemMessage($"Online. Deine Adresse für Freunde: {string.Join(", ", LocalAddresses())}");
+            SystemMessage("💡 Tipp: In Schul-WLANs können sich Handys und Laptops oft nicht direkt erreichen. " +
+                          "Klappt es nicht, nehmt den „🌍 Internet-Link“ und am Handy mobile Daten statt WLAN.");
             if (txtChatPassword.TextLength == 0)
                 SystemMessage("⚠ Kein Passwort gesetzt – jeder im Netz könnte mitlesen. Vereinbart ein Passwort!");
             _web.SetPassword(txtChatPassword.Text);

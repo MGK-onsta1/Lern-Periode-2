@@ -112,6 +112,30 @@ Gibt `Decrypt` `null` zurück, war das Passwort falsch → Verbindung zu.
 - Was passiert in `RunAsync`, wenn mein Freund ein anderes Passwort hat?
 - Wo steht der Port 47800, und was müsste ich ändern, damit das Programm Port 48000 benutzt?
 
+### Antworten (27.11.2026 – geschrieben von Claude, nicht von mir)
+
+**1. Warum ein neues Nonce?**
+AES-GCM macht aus Schlüssel + Nonce einen „Zufallsstrom“, der mit der Nachricht gemischt wird.
+Würde man dasselbe Nonce zweimal benutzen, wäre auch der Strom zweimal gleich. Ein Angreifer könnte dann
+die zwei verschlüsselten Nachrichten miteinander vergleichen und Teile vom Text herausfinden, und er könnte sogar
+das Siegel (Tag) fälschen. Mit `RandomNumberGenerator.GetBytes(12)` ist das Nonce jedes Mal neu.
+Darum sieht auch dieselbe Nachricht „SOS“ jedes Mal anders aus.
+
+**2. Was passiert in `RunAsync` bei einem anderen Passwort?**
+Der Freund hat einen anderen Schlüssel. Seine erste Zeile (das `hello`) lässt sich bei mir nicht entschlüsseln:
+Das Siegel passt nicht, `aes.Decrypt` wirft einen Fehler, und `Decrypt` gibt `null` zurück.
+Dann setzt `RunAsync` den Grund „abgelehnt: falsches Passwort“, verlässt die Schleife mit `break`,
+schliesst die Verbindung (`Close()`) und meldet es über `OnClosed` → `Log` im Chat.
+Beim Freund geht die Verbindung zu, bevor ich „Hallo“ sagen konnte. Er sieht darum
+„Verbindung abgebrochen – habt ihr beide dasselbe Passwort?“.
+
+**3. Port 48000 statt 47800?**
+Der Port steht an einer einzigen Stelle: `ChatNode.cs`, Zeile 15: `public const int DefaultPort = 47800;`.
+Man ändert nur diese Zahl auf `48000`. Alle anderen Stellen (`GoOnline` und `ConnectToHost` in `Form1.Chat.cs`)
+benutzen `ChatNode.DefaultPort`, und die WLAN-Suche schickt den Port automatisch mit.
+**Aber:** Alle Freunde brauchen dann die neue Version, sonst klopfen sie noch an Port 47800 an.
+Der Browser-Chat hat einen eigenen Port (`WebBridge.DefaultPort = 47802`), der bleibt gleich.
+
 ---
 
 ## Deine Aufgabe (ohne KI!)

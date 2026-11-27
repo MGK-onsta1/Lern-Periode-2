@@ -12,7 +12,9 @@ namespace Morse
         private readonly Label _url = new()
         {
             Dock = DockStyle.Fill, AutoSize = true, TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Consolas", 11F), ForeColor = Color.RoyalBlue, Padding = new Padding(0, 6, 0, 6),
+            Font = new Font("Consolas", 9.5F), ForeColor = Color.RoyalBlue, Padding = new Padding(0, 6, 0, 6),
+            MaximumSize = new Size(400, 0),   // lange Links (Internet) umbrechen statt das Fenster zu sprengen
+            Cursor = Cursors.Hand,
         };
 
         /// <param name="links">(Beschriftung, URL) – z. B. ("🌍 Internet", "https://…")</param>
@@ -54,6 +56,15 @@ namespace Morse
 
             var close = new Button { Text = "Schließen", AutoSize = true, Anchor = AnchorStyles.Right, Padding = new Padding(10, 3, 10, 3) };
             close.Click += (_, _) => Close();
+
+            // Klick auf den Link kopiert ihn, dann kann man ihn z. B. per WhatsApp schicken
+            var tip = new ToolTip();
+            tip.SetToolTip(_url, "Klicken = Link kopieren");
+            _url.Click += (_, _) =>
+            {
+                Clipboard.SetText(_url.Text);
+                tip.Show("✔ Link kopiert", _url, 0, -24, 1500);
+            };
             CancelButton = close;
 
             layout.Controls.Add(hint, 0, 0);

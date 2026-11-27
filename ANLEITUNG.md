@@ -34,12 +34,13 @@
 ### Mit dem Handy (ohne Programm)
 1. **„Online gehen“** klicken. Der Haken „Browser-Zugang“ muss gesetzt sein.
 2. Auf **„📱 QR-Code“** klicken. Dein Freund scannt ihn mit der Handy-Kamera und gibt das Passwort ein.
-3. Das geht nur, wenn das Handy im **gleichen WLAN** ist.
+3. Das geht nur, wenn das Handy im **gleichen WLAN** ist. In Schul-WLANs ist das oft blockiert, dann den **Internet-Link** nehmen.
 
 ### Über das Internet
 1. **„Online gehen“** und dann **„🌍 Internet-Link“** klicken.
 2. Beim ersten Mal wird das kostenlose Programm *cloudflared* heruntergeladen (ca. 53 MB).
-3. Nach ein paar Sekunden erscheint ein Link `https://….trycloudflare.com`. Schick ihn deinem Freund, oder er scannt den QR-Code.
+3. Nach ein paar Sekunden erscheint ein Link `https://….trycloudflare.com`. Schick ihn deinem Freund, oder er scannt den QR-Code. **Klick auf den Link** im QR-Fenster kopiert ihn.
+4. Im Schul-WLAN wird der Link oft blockiert. Dann am Handy **WLAN aus** und **mobile Daten** benutzen.
 
 ### Mit der Leertaste morsen
 1. Unten im Chat den Haken bei **„🔑 Mit Leertaste morsen“** setzen.
@@ -69,3 +70,4 @@ Im Ordner `%AppData%\Morse` (in die Adresszeile vom Explorer eingeben):
 | Leertaste macht nichts | Im Lern-Modus zuerst **Start / Weiter** klicken. Im Chat den Haken **„Mit Leertaste morsen“** setzen. |
 | „Verbindung abgebrochen – habt ihr beide dasselbe Passwort?“ | Jemand hat es mit einem anderen Passwort versucht. Vergleicht das Passwort. |
 | „Schon in einem anderen Fenster online“ | Das Programm läuft zweimal. Schliesse ein Fenster. |
+| Handy: „Keine Verbindung“ | Im Schul-WLAN blockiert. Am Handy WLAN ausschalten und mit mobilen Daten den Internet-Link öffnen. |

@@ -97,10 +97,24 @@ namespace Morse
             if (packet.T == "hello")
             {
                 bool first = peer.Name == null;
-                peer.Name = packet.N;
+                peer.Name = CleanName(packet.N);
                 if (first) PeerConnected?.Invoke(peer);
             }
-            else if (packet.T == "msg" && peer.Name != null) MessageReceived?.Invoke(peer, packet.N, packet.M);
+            else if (packet.T == "msg" && peer.Name != null) MessageReceived?.Invoke(peer, CleanName(packet.N), packet.M);
+        }
+
+        /// <summary>Höchstens so viele Zeichen darf ein Name haben.</summary>
+        public const int MaxNameLength = 20;
+
+        /// <summary>
+        /// Aufgabe 6 (gelöst von Claude, 27.11.2026): Ein Name darf höchstens 20 Zeichen haben.
+        /// Leerzeichen am Anfang/Ende fallen weg, ein leerer Name wird zu „Gast“ – wie in WebBridge.cs mit Math.Min.
+        /// </summary>
+        public static string CleanName(string? name)
+        {
+            name = (name ?? "").Trim();
+            if (name.Length == 0) return "Gast";
+            return name[..Math.Min(name.Length, MaxNameLength)];
         }
 
         private void OnClosed(Peer peer, string? reason)

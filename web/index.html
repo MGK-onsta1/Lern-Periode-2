@@ -585,7 +585,7 @@ function onMessage(ev) {
 }
 function onClose() {
   joined = false;
-  if (!everJoined) { if (!rejected) fail("Keine Verbindung. Ist dein Freund noch online?"); return; }
+  if (!everJoined) { if (!rejected) fail("Keine Verbindung. Ist dein Freund noch online? Im Schul-WLAN wird der Chat oft blockiert – schalte am Handy das WLAN aus und versuch es mit mobilen Daten."); return; }
   if (rejected) return;
   $("dot").classList.add("off");
   if (!lostShown) { lostShown = true; sys("Verbindung getrennt – ich versuche es weiter …"); }
