@@ -290,9 +290,9 @@ Als Nächstes will ich den Chat endlich mit echten Freunden und Handys testen. A
 # 27.11.2026 | Projekt: Morse-Übersetzer
 
 ## Heute
-Heute habe ich den Chat zum ersten Mal mit einem **echten Handy** getestet (mein iPhone mit Safari). Über das Schul-WLAN hat es nicht geklappt: Weder der WLAN-Link noch der Internet-Link sind angekommen. Das Schul-WLAN lässt Handy und Laptop nicht direkt miteinander reden und blockiert auch den Internet-Link. Mit **mobilen Daten** und dem **Internet-Link** hat es dann funktioniert: Ich habe vom Handy „HALLO TEST“ geschickt und am Laptop geantwortet. Am Schluss habe ich die Version **1.2** als neue `Morse.exe` gemacht: **https://github.com/MGK-onsta1/Morse-Uebersetzer**. Der neue Code ist auch hier in Lern-Periode-2.
+Ich habe den Chat mit meinem iPhone getestet. Im Schul-WLAN ging es nicht, weil die Schule das blockiert. Mit **mobilen Daten** und dem **Internet-Link** hat es geklappt. Danach habe ich die **Version 1.2** gemacht: **https://github.com/MGK-onsta1/Morse-Uebersetzer**
 
-**Hilfe:** Bei dieser Sitzung hat mir **Claude** (eine KI von Anthropic) sehr geholfen: beim Testen, Programmieren, bei den Screenshots und beim Schreiben von diesem Eintrag. **Ehrlich:** Die 3 Testfragen zu `ChatNode.cs` und die Aufgabe 6 hat **Claude** gemacht, nicht ich.
+**Hilfe:** **Claude** (eine KI) hat mir sehr geholfen. Die 3 Testfragen und die Aufgabe 6 hat Claude gemacht, nicht ich.
 
 <img width="720" alt="QR-Code für den WLAN-Link" src="bilder/2711-ap1-qr-wlan.jpg" />
 
@@ -300,32 +300,31 @@ Heute habe ich den Chat zum ersten Mal mit einem **echten Handy** getestet (mein
 
 <img width="720" alt="Chat mit dem iPhone über mobile Daten" src="bilder/2711-ap1-handy-chat.jpg" />
 
-Ich hatte einige Fehler:
-- Im QR-Fenster war der lange Internet-Link abgeschnitten und hat den Knopf „Schließen“ verdeckt.
-- Im Programm stand nirgends, dass Schul-WLANs den Chat blockieren können.
-- Am Handy stand nur „Keine Verbindung“, ohne Tipp, was man machen kann.
+Fehler:
+- Der lange Link im QR-Fenster war abgeschnitten.
+- Es gab keinen Tipp zum Schul-WLAN.
+- Am Handy stand nur „Keine Verbindung“.
 
-Alle drei Fehler sind behoben. Neu kann man auch auf den Link klicken, dann wird er kopiert.
+Alle drei sind behoben.
 
 <img width="720" alt="QR-Fenster repariert" src="bilder/2711-ap2-qr-repariert.jpg" />
 
 Gelernt habe ich:
-- Schul-WLANs haben oft „Client-Isolation“. Dann können sich Geräte im gleichen WLAN nicht sehen.
-- Mit mobilen Daten geht das Handy direkt ins Internet und umgeht so die Sperre im Schul-WLAN.
-- `name[..Math.Min(name.Length, 20)]` schneidet einen Text nach 20 Zeichen ab.
+- Schul-WLANs blockieren oft Verbindungen zwischen Geräten.
+- Mit mobilen Daten geht es trotzdem.
 
-**Status:** fertig – der Handy-Chat klappt über den Internet-Link mit mobilen Daten. Mit Freunden habe ich es noch nicht getestet.
+**Status:** fertig – der Handy-Chat klappt. Mit Freunden habe ich es noch nicht getestet.
 
 <img width="720" alt="Ein zu langer Name wird auf 20 Zeichen gekürzt" src="bilder/2711-ap4-name-begrenzt.jpg" />
 
 ## Zusammenfassung
-Alle 4 Arbeitspakete sind erledigt, aber nicht alle von mir. Den Praxistest und die Fehler habe ich zusammen mit Claude gemacht. Die Antworten auf die 3 Testfragen und die Aufgabe 6 (Name höchstens 20 Zeichen) hat Claude allein gemacht. Die Antworten stehen in der [Code-Erklärung](CODE-ERKLAERUNG.md).
+Alle 4 Arbeitspakete sind fertig. Den Test und die Fehler habe ich mit Claude gemacht. Die Testfragen und Aufgabe 6 hat Claude allein gemacht.
 
 ## Ausblick
-Als Nächstes will ich die Antworten von Claude selbst verstehen und eine Aufgabe wirklich ohne KI lösen. Und ich will den Chat endlich mit Freunden ausprobieren.
+Ich will die Antworten von Claude selbst verstehen und den Chat mit Freunden testen.
 
 ## Nächstes Mal (4 Arbeitspakete)
-- [ ] **Antworten verstehen:** die 3 Antworten von Claude in eigenen Worten erklären
-- [ ] **Selbst ändern:** Aufgabe 5 (eigene Meldung bei falschem Passwort) wirklich ohne KI lösen
-- [ ] **Test mit Freunden:** mit 2 Freunden über den Internet-Link chatten (mit mobilen Daten)
-- [ ] **Fehler notieren:** alles aufschreiben, was beim Test mit Freunden nicht klappt
+- [ ] **Antworten verstehen:** die 3 Antworten in eigenen Worten erklären
+- [ ] **Selbst ändern:** Aufgabe 5 ohne KI lösen
+- [ ] **Test mit Freunden:** mit 2 Freunden über den Internet-Link chatten
+- [ ] **Fehler notieren:** aufschreiben, was nicht klappt
