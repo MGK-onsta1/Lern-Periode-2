@@ -235,10 +235,10 @@ Ausserdem habe ich im Cisco-Kurs mit Modul 3 angefangen (Wireless and Mobile Net
 Als Nächstes will ich den Chat mit echten Laptops und Handys testen und die Fehler beheben, die dabei auftauchen. Danach soll man im Chat direkt mit der Leertaste morsen können, und ich will meinen Code besser verstehen.
 
 ## Nächstes Mal (4 Arbeitspakete)
-- [ ]  Praxistest mit Freunden:** Chat über WLAN, Handy-Browser und Internet-Link testen und Fehler notieren
+- [x]  Praxistest mit Freunden:** Chat über WLAN, Handy-Browser und Internet-Link testen und Fehler notieren
 - [x]  Fehler beheben:** die gefundenen Fehler reparieren und eine neue `.exe` hochladen
 - [x]  Morsetaste im Chat:** eine Nachricht nur mit der Leertaste schreiben und senden
-- [ ]  Code verstehen:** mit Hilfe der KI `ChatNode.cs` verstehen und einen kleinen Teil selbst ohne KI ändern
+- [x]  Code verstehen:** mit Hilfe der KI `ChatNode.cs` verstehen und einen kleinen Teil selbst ohne KI ändern
 
 # 26.11.2026 | Projekt: Morse-Übersetzer
 
